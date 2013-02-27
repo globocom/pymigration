@@ -1,9 +1,7 @@
 import os
 
 from setuptools import setup, find_packages
-
-version = '0.0'
-
+from pymigration.version import version
 
 def fullpath(*args):
     project_path = os.path.dirname(__file__)
