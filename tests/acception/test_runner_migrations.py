@@ -24,3 +24,11 @@ class TestMigrations(unittest2.TestCase):
     def test_should_perform_the_migrations_down_command(self):
         output = shell("pymigration -d")
         self.assertIn("Starting migration down!", output)
+
+    def test_should_get_current_version(self):
+        output = shell("pymigration -c")
+        self.assertEqual("0.0.1", output)
+
+    def test_should_displays_pymigration_s_version(self):
+        output = shell("pymigration -v")
+        self.assertIn("0.0.1", output)
