@@ -5,6 +5,7 @@ unit () {
 }
 
 acception () {
+    python setup.py install
     nosetests tests/acception --with-spec --spec-color
 }
 

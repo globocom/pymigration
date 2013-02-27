@@ -17,9 +17,10 @@ class TestMigrations(unittest2.TestCase):
     def setUp(self):
         pass
     
-    def test_deve_listar_as_migrations(self):
-        listagem = shell("pymigration --help")
-        self.assertEqual(listagem, "pymigrations is a generic migration tool inspired on Rails migrations.")
+    def test_should_perform_the_migrations_up_command(self):
+        output = shell("pymigration -u")
+        self.assertIn("Starting migration up!", output)
 
-
-
+    def test_should_perform_the_migrations_down_command(self):
+        output = shell("pymigration -d")
+        self.assertIn("Starting migration down!", output)
