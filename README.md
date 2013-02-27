@@ -1,4 +1,5 @@
-pymigration
+
+Pymigration
 ===========
 
-A generic tool for migrate in python
+A generic tool for migrate in python.

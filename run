@@ -1,0 +1,18 @@
+#!/bin/bash
+
+unit () {
+    nosetests tests/unitario -c .noserc
+}
+
+acception () {
+    nosetests tests/acception --with-spec --spec-color
+}
+
+if [ $1 ]; then
+    $1 $2 $3 $4 $5;
+else
+    echo  "   acception - runner acception tests"
+    echo  "   unit - runner unit tests"
+    exit 1
+fi;
+
