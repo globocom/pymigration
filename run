@@ -1,7 +1,7 @@
 #!/bin/bash
 
 unit () {
-    nosetests tests/unitario -c .noserc
+    nosetests tests/unit -c .noserc
 }
 
 acception () {
