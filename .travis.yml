@@ -5,3 +5,8 @@ python:
 install: "pip install -r test-requirements.txt --use-mirrors"
 # command to run tests
 script: nosetests
+
+branches:
+  only:
+    - master
+    - develop
