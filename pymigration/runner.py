@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from optparse import OptionParser
-
-from pymigration.model import Migrations
+from pymigration.version import version
+from pymigration.model import Migrations, fullpath
 
 
 def pymigration():
@@ -15,12 +15,15 @@ def pymigration():
                       help="Displays simple-db-migrate's version and exit.", action="store_true")
 
     parser.add_option("-l", "--list", dest="down", default=False,
-                      help="Displays docstrings the up or down methods.", action="store_false")
+                      help="Displays docstrings the up or down methods.", action="store_true")
 
     parser.add_option("-v", "--version", dest="version", default=False,
-                      help="Displays pymigration's version and exit.", action="store_false")
+                      help="Displays pymigration's version and exit.", action="store_true")
 
     (options, args) = parser.parse_args()
+
+    if options.version:
+        print version
 
     migrations = Migrations()
 
