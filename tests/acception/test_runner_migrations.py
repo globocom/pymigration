@@ -29,6 +29,17 @@ class TestMigrations(unittest2.TestCase):
         output = shell("pymigration -c")
         self.assertEqual("0.0.1", output)
 
-    def test_should_displays_pymigration_s_version(self):
+    def test_should_displays_pymigrations_version(self):
         output = shell("pymigration -v")
         self.assertIn("0.0.1", output)
+
+    def test_should_list_migrations_of_tests(self):
+        output = shell("pymigration -l")
+        list_migrations = """
+0.0.1           - migrate_world.py
+                  migrate all the world of test
+                  greetings world
+                  up - HeLo World
+                       and migrate the world
+                  down - roolback the world"""
+        self.assertEqual(list_migrations.strip(), output.strip())

@@ -14,8 +14,8 @@ def pymigration():
     parser.add_option("-d", "--down", dest="down", default=False,
                       help="Displays simple-db-migrate's version and exit.", action="store_true")
 
-    parser.add_option("-l", "--list", dest="down", default=False,
-                      help="Displays docstrings the up or down methods.", action="store_true")
+    parser.add_option("-l", "--list", dest="list", default=False,
+                      help="Show a list of migrations.", action="store_true")
 
     parser.add_option("-c", "--current-version", dest="current_version", default=False,
                       help="Version of actual migration.", action="store_true")
@@ -40,3 +40,5 @@ def pymigration():
     if options.current_version:
         migrations.get_current_version()
 
+    if options.list:
+        migrations.list_of_migrations()
