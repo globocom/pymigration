@@ -1,0 +1,5 @@
+unittest2==0.5.1
+nose==1.2.1
+coverage==3.6b3
+NoseXML==0.19
+pinocchio==0.3.1
