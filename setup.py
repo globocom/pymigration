@@ -1,12 +1,23 @@
+import os
+
 from setuptools import setup, find_packages
 
 version = '0.0'
 
-setup(name='pymigrations',
+
+def fullpath(*args):
+    project_path = os.path.dirname(__file__)
+    return os.path.join(project_path, *args)
+
+
+with open(fullpath("README.md")) as readme:
+    long_description = readme.read()
+
+
+setup(name='pymigration',
       version=version,
-      description="pymigrations is a generic migration tool inspired on Rails migrations.",
-      long_description="""\
-""",
+      description="A generic tool for migrate in python.",
+      long_description=long_description,
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='migration',
       author='Team Search of globo.com',
@@ -22,9 +33,7 @@ setup(name='pymigrations',
 
       entry_points={
             'console_scripts': [
-                'pymigration_list = pymigrations.runner:pymigration_list',
-                'pymigration_up = pymigrations.runner:pymigration_up',
-                'pymigration_down = pymigrations.runner:pymigration_down',
+                'pymigration = pymigration.runner:pymigration',
             ]
         },
       )
