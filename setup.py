@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import sys, os
 
 version = '0.0'
 
@@ -10,7 +9,7 @@ setup(name='pymigrations',
 """,
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='migration',
-      author='Time Busca globo.com',
+      author='Team Search of globo.com',
       author_email='busca@corp.globo.com',
       url='',
       license='MIT',
