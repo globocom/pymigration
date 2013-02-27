@@ -4,7 +4,7 @@ python:
 # command to install dependencies
 install: "pip install -r test-requirements.txt --use-mirrors"
 # command to run tests
-script: nosetests
+script: nosetests tests/unit tests/acception
 
 branches:
   only:

@@ -16,7 +16,7 @@ class TestMigrations(unittest2.TestCase):
 
     def setUp(self):
         pass
-    
+
     def test_should_perform_the_migrations_up_command(self):
         output = shell("pymigration -u")
         self.assertIn("Starting migration up!", output)
