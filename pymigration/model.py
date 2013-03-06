@@ -17,6 +17,7 @@ class Migrations(object):
     def upgrade(self, version=0):
         if self.execute:
             print "Starting migration up!"
+            return "Starting migration up!"
         else:
             print "Listing migrations up"
             self._list_of_migrations_up()
