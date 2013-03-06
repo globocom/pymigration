@@ -61,10 +61,9 @@ class TestMigrations(unittest2.TestCase):
         output = shell("pymigration -d --no-exec")
         list_migrations = """Listing migrations
 
-0.0.1           - hello_world.py
-                  migrate all the world of test
-                  greetings world
-                  down - roolback the world
+0.0.3           - bye_world.py
+                  bye world
+                  down - recreate the world
 
 
 0.0.2           - bla_bla_bla.py
@@ -72,9 +71,10 @@ class TestMigrations(unittest2.TestCase):
                   down - roolback the bla bla bla
 
 
-0.0.3           - bye_world.py
-                  bye world
-                  down - recreate the world
+0.0.1           - hello_world.py
+                  migrate all the world of test
+                  greetings world
+                  down - roolback the world
 """
         self.assertEqual(list_migrations.strip(), output.strip(), "\n"+output)
 

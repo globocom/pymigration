@@ -37,12 +37,12 @@ class Migrations(object):
                 content = f.read()
                 print content
 
-    def migrations_files(self):
+    def migrations_files(self, reverse=False):
         finder = ModuleFinder()
         submodules_names = finder.find_all_submodules(pymigrations)
         submodules_names.remove("conf")
         submodules = [import_module("pymigrations.%s" % name) for name in submodules_names]
-        submodules = sorted(submodules, key=lambda s: s.version)
+        submodules = sorted(submodules, key=lambda s: s.version, reverse=reverse)
         return submodules
 
     def _list_of_migrations_up(self):
@@ -50,7 +50,7 @@ class Migrations(object):
             print FormatterMessage(migration).message_up()
 
     def _list_of_migrations_down(self):
-        for migration in self.migrations_files():
+        for migration in self.migrations_files(reverse=True):
             print FormatterMessage(migration).message_down()
 
 
