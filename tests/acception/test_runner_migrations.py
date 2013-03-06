@@ -2,6 +2,8 @@
 
 import unittest2
 import os
+import difflib
+
 
 from commands import getoutput
 
@@ -13,6 +15,10 @@ def shell(command):
 
 
 class TestMigrations(unittest2.TestCase):
+
+    def assertTextEqual(self, first, second, msg=None):
+        diff = ''.join(difflib.ndiff(first.splitlines(1), second.splitlines(1)))
+        self.assertEqual(first, second, msg or diff)
 
     def setUp(self):
         pass
@@ -55,7 +61,7 @@ class TestMigrations(unittest2.TestCase):
                   up - Bye World
                        and destroy the world
 """
-        self.assertEqual(list_migrations.strip(), output.strip(), "\n"+output)
+        self.assertTextEqual(list_migrations.strip(), output.strip())
 
     def test_should_use_command_down_and_no_execute_migrantions_of_test_only_list(self):
         output = shell("pymigration -d --no-exec")
@@ -76,7 +82,7 @@ class TestMigrations(unittest2.TestCase):
                   bye world
                   down - recreate the world
 """
-        self.assertEqual(list_migrations.strip(), output.strip(), "\n"+output)
+        self.assertTextEqual(list_migrations.strip(), output.strip())
 
 
     
