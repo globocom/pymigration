@@ -18,14 +18,14 @@ class Migrations(object):
         if self.execute:
             print "Starting migration up!"
         else:
-            print "Listing migrations"
+            print "Listing migrations up"
             self._list_of_migrations_up()
 
     def downgrade(self, version=0):
         if self.execute:
             print "Starting migration down!"
         else:
-            print "Listing migrations"
+            print "Listing migrations down"
             self._list_of_migrations_down()
 
     def get_current_version(self):

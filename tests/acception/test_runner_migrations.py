@@ -35,7 +35,7 @@ class TestMigrations(unittest2.TestCase):
 
     def test_should_use_command_up_and_no_execute_migrations_of_tests_only_list(self):
         output = shell("pymigration -u --no-exec")
-        list_migrations = """Listing migrations
+        list_migrations = """Listing migrations up
 
 0.0.1           - hello_world.py
                   migrate all the world of test
@@ -59,7 +59,7 @@ class TestMigrations(unittest2.TestCase):
 
     def test_should_use_command_down_and_no_execute_migrantions_of_test_only_list(self):
         output = shell("pymigration -d --no-exec")
-        list_migrations = """Listing migrations
+        list_migrations = """Listing migrations down
 
 0.0.3           - bye_world.py
                   bye world
