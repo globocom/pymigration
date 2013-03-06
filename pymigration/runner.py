@@ -7,6 +7,7 @@ from argparse import ArgumentParser
 from pymigration.version import version
 sys.path.insert(0, os.getcwd())
 from pymigration.model import Migrations
+from views import TerminalMessages
 
 
 def pymigration():
@@ -31,17 +32,18 @@ def pymigration():
 
     if args.version:
         print version
-
-    migrations = Migrations(args.execute)
+    migrations = Migrations(**vars(args))
+    terminal_message = TerminalMessages(migrations, **vars(args))
 
     if args.down:
-        migrations.downgrade()
+        for migration in migrations.down_migrations():
+            migration.down()
+            terminal_message.down_message(migration)
 
     if args.up:
-        migrations.upgrade()
+        for migration in migrations.up_migrations():
+            migration.up()
+            terminal_message.up_message(migration)
 
     if args.current_version:
-        migrations.get_current_version()
-
-    # if args.list:
-    #     migrations.list_of_migrations(up=args.up, down=args.down)
+        terminal_message.current_version()

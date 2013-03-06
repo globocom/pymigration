@@ -4,8 +4,9 @@
 import unittest2
 import difflib
 
-from pymigration.model import FormatterMessage
+from pymigration.views import FormatterMessage
 from pymigrations import hello_world
+from pymigration.model import Migration
 
 
 
@@ -16,7 +17,8 @@ class TestFormatterMessage(unittest2.TestCase):
         self.assertEqual(first, second, msg or diff)
 
     def test_should_format_a_message(self):
-        message = FormatterMessage(hello_world).message_up()
+        migration = Migration(migration_file=hello_world)
+        message = FormatterMessage(migration).message_up()
         expected_message = """
 0.0.1           - hello_world.py
                   migrate all the world of test
@@ -25,4 +27,3 @@ class TestFormatterMessage(unittest2.TestCase):
                        and migrate the world
 """
         self.assertTextEqual(expected_message.strip(), message.strip())
-        

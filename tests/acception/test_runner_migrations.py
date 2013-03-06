@@ -17,7 +17,7 @@ def shell(command):
 class TestMigrations(unittest2.TestCase):
 
     def assertTextEqual(self, first, second, msg=None):
-        diff = ''.join(difflib.ndiff(first.splitlines(1), second.splitlines(1)))
+        diff = "\n\n" + ''.join(difflib.ndiff(first.splitlines(1), second.splitlines(1)))
         self.assertEqual(first, second, msg or diff)
 
     def setUp(self):
@@ -25,15 +25,15 @@ class TestMigrations(unittest2.TestCase):
 
     def test_should_perform_the_migrations_up_command(self):
         output = shell("pymigration -u")
-        self.assertIn("Starting migration up!", output)
+        self.assertIn("Running command: pymigration -u", output)
 
     def test_should_perform_the_migrations_down_command(self):
         output = shell("pymigration -d")
-        self.assertIn("Starting migration down!", output)
+        self.assertIn("Running command: pymigration -d", output)
 
     def test_should_get_current_version(self):
         output = shell("pymigration -c")
-        self.assertEqual("0.0.1", output)
+        self.assertIn("0.0.1", output)
 
     def test_should_displays_pymigrations_version(self):
         output = shell("pymigration -v")
@@ -41,7 +41,7 @@ class TestMigrations(unittest2.TestCase):
 
     def test_should_use_command_up_and_no_execute_migrations_of_tests_only_list(self):
         output = shell("pymigration -u --no-exec")
-        list_migrations = """Listing migrations up
+        list_migrations = """Running command: pymigration -u --no-exec
 
 0.0.1           - hello_world.py
                   migrate all the world of test
@@ -65,7 +65,7 @@ class TestMigrations(unittest2.TestCase):
 
     def test_should_use_command_down_and_no_execute_migrantions_of_test_only_list(self):
         output = shell("pymigration -d --no-exec")
-        list_migrations = """Listing migrations down
+        list_migrations = """Running command: pymigration -d --no-exec
 
 0.0.3           - bye_world.py
                   bye world

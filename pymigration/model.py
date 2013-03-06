@@ -2,16 +2,16 @@
 
 import pymigrations
 import inspect
-from textwrap import dedent
 
+from os.path import basename
 from pymigrations import conf
 from importlib import import_module
 from modulefinder import ModuleFinder
-from os.path import basename
+
 
 class Migrations(object):
 
-    def __init__(self, execute=True):
+    def __init__(self, execute=True, **kwargs):
         self.execute = execute
 
     def upgrade(self, version=0):
@@ -22,21 +22,22 @@ class Migrations(object):
             print "Listing migrations up"
             self._list_of_migrations_up()
 
-    def downgrade(self, version=0):
-        if self.execute:
-            print "Starting migration down!"
-        else:
-            print "Listing migrations down"
-            self._list_of_migrations_down()
+    def down_migrations(self, version=0):
+        for migration_file in self.migrations_files(reverse=True):
+            yield Migration(migration_file,  execute=self.execute)
+
+    def up_migrations(self, version=0):
+        for migration_file in self.migrations_files():
+            yield Migration(migration_file,  execute=self.execute)
 
     def get_current_version(self):
         if getattr(conf, "current_version", None):
-            print conf.current_version()
+            return conf.current_version()
         else:
             path = "%s/current_version.txt" % conf.folder
             with open(path, "r+") as f:
                 content = f.read()
-                print content
+                return content
 
     def migrations_files(self, reverse=False):
         finder = ModuleFinder()
@@ -46,44 +47,40 @@ class Migrations(object):
         submodules = sorted(submodules, key=lambda s: s.version, reverse=reverse)
         return submodules
 
-    def _list_of_migrations_up(self):
-        for migration in self.migrations_files():
-            print FormatterMessage(migration).message_up()
-
-    def _list_of_migrations_down(self):
-        for migration in self.migrations_files(reverse=True):
-            print FormatterMessage(migration).message_down()
 
 
-class FormatterMessage(object):
+class Migration(object):
 
-    def __init__(self, submodule):
-        self.doc_migragtion = self.ident(inspect.getdoc(submodule))
-        self.doc_up = self.ident(inspect.getdoc(submodule.up), 23).strip()
-        self.doc_down = self.ident(inspect.getdoc(submodule.down), 23).strip()
-        self.version_migrate = "{:<15}".format(str(submodule.version))
-        self.archive_name = basename(submodule.__file__.replace('.pyc', '.py'))
+    def __init__(self, migration_file, execute=True):
+        self.migration_file = migration_file
+        self.execute = execute
 
-    def message_up(self):
-        output = """
-{self.version_migrate} - {self.archive_name}
-{self.doc_migragtion}
-                  up - {self.doc_up}
-""".format(self=self)
-        return output
+    def __repr__(self):
+        return self.header()
 
-    def message_down(self):
-        output = """
-{self.version_migrate} - {self.archive_name}
-{self.doc_migragtion}
-                  down - {self.doc_down}
-""".format(self=self)
-        return output
+    def __eq__(self, migration):
+        return self.migration_file == migration.migration_file
 
+    def up(self):
+        if self.execute:
+            self.migration_file.up()
 
-    def ident(self, text, space=18):
-        text = dedent(text)
-        lines = text.split("\n")
-        text_ident = " "*space
-        text = text_ident + ("\n" + text_ident).join(lines)
-        return text
+    def down(self):
+        if self.execute:
+            self.migration_file.down()
+
+    def header(self):
+        return inspect.getdoc(self.migration_file)
+
+    def doc_up(self):
+        return inspect.getdoc(self.migration_file.up)
+
+    def doc_down(self):
+        return inspect.getdoc(self.migration_file.down)
+
+    @property
+    def version(self):
+        return self.migration_file.version
+
+    def filename(self):
+        return basename(self.migration_file.__file__.replace('.pyc', '.py'))
