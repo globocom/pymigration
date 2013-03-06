@@ -9,6 +9,10 @@ acception () {
     nosetests tests/acception --with-spec --spec-color
 }
 
+clean () {
+    find . -iname '*.pyc' -delete
+}
+
 if [ $1 ]; then
     $1 $2 $3 $4 $5;
 else
