@@ -33,13 +33,50 @@ class TestMigrations(unittest2.TestCase):
         output = shell("pymigration -v")
         self.assertIn("0.0.1", output)
 
-    def test_should_list_migrations_of_tests(self):
-        output = shell("pymigration -l")
-        list_migrations = """
-0.0.1           - migrate_world.py
+    def test_should_use_command_up_and_no_execute_migrations_of_tests_only_list(self):
+        output = shell("pymigration -u --no-exec")
+        list_migrations = """Listing migrations
+
+0.0.1           - hello_world.py
                   migrate all the world of test
                   greetings world
                   up - HeLo World
                        and migrate the world
-                  down - roolback the world"""
-        self.assertEqual(list_migrations.strip(), output.strip())
+
+
+0.0.2           - bla_bla_bla.py
+                  Bla Bla Bla
+                  up - Start dialogue
+                       Bla Bla Bla
+
+
+0.0.3           - bye_world.py
+                  bye world
+                  up - Bye World
+                       and destroy the world
+"""
+        self.assertEqual(list_migrations.strip(), output.strip(), "\n"+output)
+
+    def test_should_use_command_down_and_no_execute_migrantions_of_test_only_list(self):
+        output = shell("pymigration -d --no-exec")
+        list_migrations = """Listing migrations
+
+0.0.1           - hello_world.py
+                  migrate all the world of test
+                  greetings world
+                  down - roolback the world
+
+
+0.0.2           - bla_bla_bla.py
+                  Bla Bla Bla
+                  down - roolback the bla bla bla
+
+
+0.0.3           - bye_world.py
+                  bye world
+                  down - recreate the world
+"""
+        self.assertEqual(list_migrations.strip(), output.strip(), "\n"+output)
+
+
+    

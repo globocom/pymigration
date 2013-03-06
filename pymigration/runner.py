@@ -1,44 +1,47 @@
 # -*- coding: utf-8 -*-
 
-from optparse import OptionParser
+import sys
+import os
+
+from argparse import ArgumentParser
 from pymigration.version import version
+sys.path.insert(0, os.getcwd())
 from pymigration.model import Migrations
 
 
 def pymigration():
 
-    parser = OptionParser()
-    parser.add_option("-u", "--up", dest="up", default=False,
-                      help="Execute python methods to upgrade shema of sistem.", action="store_true")
+    parser = ArgumentParser(description="Parameters to migrate.")
+    parser.add_argument("-u", "--up", dest="up", default=False, action="store_true",
+                      help="Execute python methods to upgrade shema of sistem.")
 
-    parser.add_option("-d", "--down", dest="down", default=False,
-                      help="Displays simple-db-migrate's version and exit.", action="store_true")
+    parser.add_argument("--no-exec", default=True, dest="execute", action="store_false",
+                        help="If u want only see the list of migrantions command.")
 
-    parser.add_option("-l", "--list", dest="list", default=False,
-                      help="Show a list of migrations.", action="store_true")
+    parser.add_argument("-d", "--down", dest="down", default=False, action="store_true",
+                      help="Displays simple-db-migrate's version and exit.")
 
-    parser.add_option("-c", "--current-version", dest="current_version", default=False,
+    parser.add_argument("-c", "--current-version", dest="current_version", default=False,
                       help="Version of actual migration.", action="store_true")
 
-    parser.add_option("-v", "--version", dest="version", default=False,
+    parser.add_argument("-v", "--version", dest="version", default=False,
                       help="Displays pymigration's version and exit.", action="store_true")
 
+    args = parser.parse_args()
 
-    (options, args) = parser.parse_args()
-
-    if options.version:
+    if args.version:
         print version
 
-    migrations = Migrations()
+    migrations = Migrations(args.execute)
 
-    if options.down:
+    if args.down:
         migrations.downgrade()
 
-    if options.up:
+    if args.up:
         migrations.upgrade()
 
-    if options.current_version:
+    if args.current_version:
         migrations.get_current_version()
 
-    if options.list:
-        migrations.list_of_migrations()
+    # if args.list:
+    #     migrations.list_of_migrations(up=args.up, down=args.down)
