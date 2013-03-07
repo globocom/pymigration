@@ -1,7 +1,7 @@
 #!/bin/bash
 
 unit () {
-    nosetests tests/unit -c .noserc
+    nosetests tests/unit -c .noserc --with-spec --spec-color
 }
 
 acceptance () {
