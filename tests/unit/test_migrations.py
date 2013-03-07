@@ -29,7 +29,7 @@ class TestMigrations(unittest2.TestCase):
             file_name.append(basename(submodule.__file__))
         self.assertListEqual(['hello_world.pyc', 'bla_bla_bla.pyc', 'bye_world.pyc'], file_name)
 
-    def test_get_migration_in_reverse(self):
+    def test_get_migrations_files_in_reverse(self):
         submodules = self.migrations.migrations_files(reverse=True)
         file_name = []
         for submodule in submodules:
