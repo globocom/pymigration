@@ -14,14 +14,6 @@ class Migrations(object):
     def __init__(self, execute=True, **kwargs):
         self.execute = execute
 
-    def upgrade(self, version=0):
-        if self.execute:
-            print "Starting migration up!"
-            return "Starting migration up!"
-        else:
-            print "Listing migrations up"
-            self._list_of_migrations_up()
-
     def down_migrations(self, version=0):
         for migration_file in self.migrations_files(reverse=True):
             yield Migration(migration_file,  execute=self.execute)
@@ -46,7 +38,6 @@ class Migrations(object):
         submodules = [import_module("pymigrations.%s" % name) for name in submodules_names]
         submodules = sorted(submodules, key=lambda s: s.version, reverse=reverse)
         return submodules
-
 
 
 class Migration(object):
