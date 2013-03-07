@@ -6,7 +6,7 @@ unit () {
 
 acceptance () {
     python setup.py install
-    nosetests tests/acception --with-spec --spec-color
+    nosetests tests/acceptance --with-spec --spec-color
 }
 
 clean () {
