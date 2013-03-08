@@ -5,7 +5,7 @@ from pymigrations import hello_world
 from unittestcase import UnitTestCase
 
 
-class TestMigration(UnitTestCase):
+class TestMigrationWrapper(UnitTestCase):
 
     def setUp(self):
         self.migration = MigrationWrapper(hello_world)

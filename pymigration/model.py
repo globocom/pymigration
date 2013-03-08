@@ -16,11 +16,15 @@ class DesignatorMigration(object):
 
     def down_migrations(self, version=0):
         for migration_file in self.migrations_files(reverse=True):
-            yield MigrationWrapper(migration_file,  execute=self.execute)
+            migration = MigrationWrapper(migration_file,  execute=self.execute)
+            if migration.version <= self.get_current_version():
+                yield migration
 
     def up_migrations(self, version=0):
         for migration_file in self.migrations_files():
-            yield MigrationWrapper(migration_file,  execute=self.execute)
+            migration =  MigrationWrapper(migration_file,  execute=self.execute)
+            if migration.version > self.get_current_version():
+                yield migration
 
     def get_current_version(self):
         if getattr(conf, "current_version", None):

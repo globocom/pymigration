@@ -43,13 +43,6 @@ class TestDesignatorMigration(unittest2.TestCase):
         output = shell("pymigration -u --no-exec")
         list_migrations = """Running command: pymigration -u --no-exec
 
-0.0.1           - hello_world.py
-                  migrate all the world of test
-                  greetings world
-                  up - HeLo World
-                       and migrate the world
-
-
 0.0.2           - bla_bla_bla.py
                   Bla Bla Bla
                   up - Start dialogue
@@ -66,17 +59,6 @@ class TestDesignatorMigration(unittest2.TestCase):
     def test_should_use_command_down_and_no_execute_migrantions_of_test_only_list(self):
         output = shell("pymigration -d --no-exec")
         list_migrations = """Running command: pymigration -d --no-exec
-
-0.0.3           - bye_world.py
-                  bye world
-                  down - recreate the world
-
-
-0.0.2           - bla_bla_bla.py
-                  Bla Bla Bla
-                  down - roolback the bla bla bla
-
-
 0.0.1           - hello_world.py
                   migrate all the world of test
                   greetings world

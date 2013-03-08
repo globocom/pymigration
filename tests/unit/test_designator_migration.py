@@ -9,6 +9,21 @@ from pymigrations import bla_bla_bla, bye_world, hello_world
 from unittestcase import UnitTestCase
 
 
+class TestDesignatorMigrationMidleVersion(UnitTestCase):
+    def setUp(self):
+        self.old_current_version = pymigrations.conf.current_version
+        pymigrations.conf.current_version = lambda: '0.0.2'
+        self.migrations = DesignatorMigration()
+
+    def tearDown(self):
+        pymigrations.conf.current_version = self.old_current_version
+
+    def test_should_upgrade(self):
+        self.assertEqual([MigrationWrapper(bye_world)], list(self.migrations.up_migrations()))
+
+    def test_should_downgrade(self):
+        self.assertListEqual([MigrationWrapper(bla_bla_bla), MigrationWrapper(hello_world)], list(self.migrations.down_migrations()))
+
 
 class TestDesignatorMigration(UnitTestCase):
 
@@ -16,18 +31,20 @@ class TestDesignatorMigration(UnitTestCase):
         self.migrations = DesignatorMigration()
 
     def test_should_upgrade(self):
-        self.assertEqual([ MigrationWrapper(hello_world), MigrationWrapper(bla_bla_bla), MigrationWrapper(bye_world)], list(self.migrations.up_migrations()))
+        self.assertEqual([ MigrationWrapper(bla_bla_bla), MigrationWrapper(bye_world)], list(self.migrations.up_migrations()))
 
     def test_should_downgrade(self):
-        self.assertListEqual([ MigrationWrapper(bye_world), MigrationWrapper(bla_bla_bla), MigrationWrapper(hello_world)], list(self.migrations.down_migrations()))
+        self.assertListEqual([MigrationWrapper(hello_world)], list(self.migrations.down_migrations()))
 
     def test_should_get_current_version_in_configuration(self):
         self.assertEqual("0.0.1", self.migrations.get_current_version())
 
     def test_should_get_current_version_in_current_version_dot_txt(self):
+        original_current_version = pymigrations.conf.current_version
         del pymigrations.conf.current_version
         pymigrations.conf.folder = "%s/pymigrations" % pymigrations.conf.abs_path
         self.assertEqual("0.0.1", self.migrations.get_current_version())
+        pymigrations.conf.current_version = original_current_version
 
     def test_get_migrations_files(self):
         submodules = self.migrations.migrations_files()
