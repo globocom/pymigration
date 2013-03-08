@@ -6,7 +6,7 @@ import os
 from argparse import ArgumentParser
 from pymigration.version import version
 sys.path.insert(0, os.getcwd())
-from pymigration.model import DesignatorMigration
+from pymigration.model import DiscovererMigration
 from views import TerminalMessages
 
 
@@ -28,11 +28,14 @@ def pymigration():
     parser.add_argument("-v", "--version", dest="version", default=False,
                       help="Displays pymigration's version and exit.", action="store_true")
 
+    parser.add_argument("-t", "--to", dest="version_to", default=None,
+                    help="Displays pymigration's version and exit.")
+
     args = parser.parse_args()
 
     if args.version:
         print version
-    migrations = DesignatorMigration(**vars(args))
+    migrations = DiscovererMigration(**vars(args))
     terminal_message = TerminalMessages(migrations, **vars(args))
 
     if args.down:
@@ -47,3 +50,15 @@ def pymigration():
 
     if args.current_version:
         terminal_message.current_version()
+
+    if args.version_to:
+        for migration in migrations.to_migrations():
+            if migrations.is_up():
+                migration.up()
+                terminal_message.up_message(migration)
+            else:
+                migration.down()
+                terminal_message.down_message(migration)
+
+
+

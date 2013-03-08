@@ -9,10 +9,11 @@ from importlib import import_module
 from modulefinder import ModuleFinder
 
 
-class DesignatorMigration(object):
+class DiscovererMigration(object):
 
-    def __init__(self, execute=True, **kwargs):
+    def __init__(self, execute=True, version_to=None, **kwargs):
         self.execute = execute
+        self.version_to = version_to
 
     def down_migrations(self, version=0):
         for migration_file in self.migrations_files(reverse=True):
@@ -42,6 +43,23 @@ class DesignatorMigration(object):
         submodules = [import_module("pymigrations.%s" % name) for name in submodules_names]
         submodules = sorted(submodules, key=lambda s: s.version, reverse=reverse)
         return submodules
+
+    def to_migrations(self):
+        reverse = self.is_down()
+        for migration_file in self.migrations_files(reverse):
+            migration = MigrationWrapper(migration_file, execute=self.execute)
+            if self.is_up():
+                if self.get_current_version() < migration.version <= self.version_to:
+                    yield migration
+            if self.is_down():
+                if self.get_current_version() >= migration.version > self.version_to:
+                    yield migration
+
+    def is_up(self):
+        return self.version_to > self.get_current_version()
+
+    def is_down(self):
+        return self.version_to < self.get_current_version()
 
 
 class MigrationWrapper(object):
