@@ -6,7 +6,7 @@ unit () {
 
 acceptance () {
     python setup.py install
-    nosetests tests/acceptance --with-spec --spec-color
+    nosetests tests/acceptance  --with-spec --spec-color
 }
 
 clean () {
@@ -16,7 +16,7 @@ clean () {
 if [ $1 ]; then
     $1 $2 $3 $4 $5;
 else
-    echo  "   acception - runner acceptance tests"
+    echo  "   acceptance - runner acceptance tests"
     echo  "   unit - runner unit tests"
     exit 1
 fi;

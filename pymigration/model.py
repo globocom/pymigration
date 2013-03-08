@@ -9,18 +9,18 @@ from importlib import import_module
 from modulefinder import ModuleFinder
 
 
-class Migrations(object):
+class DesignatorMigration(object):
 
     def __init__(self, execute=True, **kwargs):
         self.execute = execute
 
     def down_migrations(self, version=0):
         for migration_file in self.migrations_files(reverse=True):
-            yield Migration(migration_file,  execute=self.execute)
+            yield MigrationWrapper(migration_file,  execute=self.execute)
 
     def up_migrations(self, version=0):
         for migration_file in self.migrations_files():
-            yield Migration(migration_file,  execute=self.execute)
+            yield MigrationWrapper(migration_file,  execute=self.execute)
 
     def get_current_version(self):
         if getattr(conf, "current_version", None):
@@ -40,7 +40,7 @@ class Migrations(object):
         return submodules
 
 
-class Migration(object):
+class MigrationWrapper(object):
 
     def __init__(self, migration_file, execute=True):
         self.migration_file = migration_file
