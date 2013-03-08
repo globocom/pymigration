@@ -2,7 +2,8 @@
 
 from pymigration.views import TerminalMessages
 from unittestcase import UnitTestCase
-from pymigration.model import DiscovererMigration
+from pymigration.model import DiscovererMigration, MigrationWrapper
+from pymigrations import hello_world
 
 
 class TestTerminalMessages(UnitTestCase):
@@ -13,3 +14,28 @@ class TestTerminalMessages(UnitTestCase):
         with self.get_stdout() as stdout:
             terminal_message.current_version()
         self.assertEqual("0.0.1\n", stdout.getvalue())
+
+    def test_should_return_message_up(self):
+        migration = MigrationWrapper(hello_world)
+        message = TerminalMessages(DiscovererMigration())
+        with self.get_stdout() as stdout:
+            message.up_message(migration)
+        self.assertTextEqual("""
+0.0.1           - hello_world.py
+                  migrate all the world of test
+                  greetings world
+                  up - HeLo World
+                       and migrate the world
+""", stdout.getvalue())
+
+    def test_should_return_message_down(self):
+        migration = MigrationWrapper(hello_world)
+        message = TerminalMessages(DiscovererMigration())
+        with self.get_stdout() as stdout:
+            message.down_message(migration)
+        self.assertTextEqual("""
+0.0.1           - hello_world.py
+                  migrate all the world of test
+                  greetings world
+                  down - roolback the world
+""", stdout.getvalue())
