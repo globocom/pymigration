@@ -6,7 +6,7 @@ import os
 from argparse import ArgumentParser
 from pymigration.version import version
 sys.path.insert(0, os.getcwd())
-from pymigration.model import Migrations
+from pymigration.model import DesignatorMigration
 from views import TerminalMessages
 
 
@@ -32,7 +32,7 @@ def pymigration():
 
     if args.version:
         print version
-    migrations = Migrations(**vars(args))
+    migrations = DesignatorMigration(**vars(args))
     terminal_message = TerminalMessages(migrations, **vars(args))
 
     if args.down:

@@ -14,7 +14,7 @@ def shell(command):
     return getoutput("cd {PROJECT_PATH} && {command}".format(PROJECT_PATH=PROJECT_PATH, command=command))
 
 
-class TestMigrations(unittest2.TestCase):
+class TestDesignatorMigration(unittest2.TestCase):
 
     def assertTextEqual(self, first, second, msg=None):
         diff = "\n\n" + ''.join(difflib.ndiff(first.splitlines(1), second.splitlines(1)))

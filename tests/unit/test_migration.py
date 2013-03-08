@@ -1,36 +1,36 @@
 # -*- coding: utf-8 -*-
 
-import unittest2
-import sys
-
-from StringIO import StringIO
-
-from pymigration.model import Migration
+from pymigration.model import MigrationWrapper
 from pymigrations import hello_world
+from unittestcase import UnitTestCase
 
 
-class TestMigration(unittest2.TestCase):
+class TestMigration(UnitTestCase):
 
     def setUp(self):
-        self.migration = Migration(hello_world)
+        self.migration = MigrationWrapper(hello_world)
 
     def test_should_execute_up_method_of_migration_and_get_message(self):
-        original_stdout = sys.stdout
-        my_stdout = StringIO()
-        sys.stdout = my_stdout
-        self.migration.up()
-        output = my_stdout.getvalue()
-        sys.stdout = original_stdout
-        self.assertEqual("HeLo World\n", output)
+        with self.get_stdout() as stdout:
+            self.migration.up()
+        self.assertEqual("HeLo World\n", stdout.getvalue())
+
+    def test_should_not_execute_up_method(self):
+        migration = MigrationWrapper(hello_world, execute=False)
+        with self.get_stdout() as stdout:
+            migration.up()
+        self.assertNotEqual("HeLo World\n", stdout.getvalue())
 
     def test_should_execute_down_method_of_migration_and_get_message(self):
-        original_stdout = sys.stdout
-        my_stdout = StringIO()
-        sys.stdout = my_stdout
-        self.migration.down()
-        output = my_stdout.getvalue()
-        sys.stdout = original_stdout
-        self.assertEqual("Bye World\n", output)
+        with self.get_stdout() as stdout:
+            self.migration.down()
+        self.assertEqual("Bye World\n", stdout.getvalue())
+
+    def test_should_not_execute_method_down_if_parameter_execute_is_equal_false(self):
+        migration = MigrationWrapper(hello_world, execute=False)
+        with self.get_stdout() as stdout:
+            migration.down()
+        self.assertNotEqual("Bye World\n", stdout.getvalue())
 
     def test_should_execute_doc_up_and_get_docstring_of_method_up_in_migration(self):
         expected_doc = "HeLo World\nand migrate the world"
@@ -47,3 +47,6 @@ class TestMigration(unittest2.TestCase):
     def test_should_get_the_name_of_migration_file(self):
         filename = "hello_world.py"
         self.assertEqual(filename, self.migration.filename())
+
+    def test_should_show_represent_of_migration(self):
+        self.assertEqual("migrate all the world of test\ngreetings world", repr(self.migration))

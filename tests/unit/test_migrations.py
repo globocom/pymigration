@@ -1,25 +1,32 @@
 # -*- coding: utf-8 -*-
 
-import unittest2
-
 from os.path import basename
 
-from pymigration.model import Migrations, Migration
+import pymigrations.conf
+
+from pymigration.model import DesignatorMigration, MigrationWrapper
 from pymigrations import bla_bla_bla, bye_world, hello_world
+from unittestcase import UnitTestCase
 
 
-class TestMigrations(unittest2.TestCase):
+
+class TestDesignatorMigration(UnitTestCase):
 
     def setUp(self):
-        self.migrations = Migrations()
+        self.migrations = DesignatorMigration ()
 
     def test_should_upgrade(self):
-        self.assertEqual([ Migration(hello_world), Migration(bla_bla_bla), Migration(bye_world)], list(self.migrations.up_migrations()))
+        self.assertEqual([ MigrationWrapper(hello_world), MigrationWrapper(bla_bla_bla), MigrationWrapper(bye_world)], list(self.migrations.up_migrations()))
 
     def test_should_downgrade(self):
-        self.assertListEqual([ Migration(bye_world), Migration(bla_bla_bla), Migration(hello_world)], list(self.migrations.down_migrations()))
+        self.assertListEqual([ MigrationWrapper(bye_world), MigrationWrapper(bla_bla_bla), MigrationWrapper(hello_world)], list(self.migrations.down_migrations()))
 
-    def test_get_current_version_in_current_version_dot_txt(self):
+    def test_should_get_current_version_in_configuration(self):
+        self.assertEqual("0.0.1", self.migrations.get_current_version())
+
+    def test_should_get_current_version_in_current_version_dot_txt(self):
+        del pymigrations.conf.current_version
+        pymigrations.conf.folder = "%s/pymigrations" % pymigrations.conf.abs_path
         self.assertEqual("0.0.1", self.migrations.get_current_version())
 
     def test_get_migrations_files(self):
