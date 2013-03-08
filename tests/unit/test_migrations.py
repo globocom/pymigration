@@ -13,7 +13,7 @@ from unittestcase import UnitTestCase
 class TestDesignatorMigration(UnitTestCase):
 
     def setUp(self):
-        self.migrations = DesignatorMigration ()
+        self.migrations = DesignatorMigration()
 
     def test_should_upgrade(self):
         self.assertEqual([ MigrationWrapper(hello_world), MigrationWrapper(bla_bla_bla), MigrationWrapper(bye_world)], list(self.migrations.up_migrations()))
