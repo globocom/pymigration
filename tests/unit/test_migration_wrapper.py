@@ -49,4 +49,4 @@ class TestMigrationWrapper(UnitTestCase):
         self.assertEqual(filename, self.migration.filename())
 
     def test_should_show_represent_of_migration(self):
-        self.assertEqual("migrate all the world of test\ngreetings world", repr(self.migration))
+        self.assertEqual("hello_world.py", repr(self.migration))

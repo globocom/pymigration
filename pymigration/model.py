@@ -69,7 +69,7 @@ class MigrationWrapper(object):
         self.execute = execute
 
     def __repr__(self):
-        return self.header()
+        return self.filename()
 
     def __eq__(self, migration):
         return self.migration_file == migration.migration_file
