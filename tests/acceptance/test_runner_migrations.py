@@ -130,5 +130,3 @@ integer division or modulo by zero\x1b[0m""", output)
                   up - Starting exeception
 
 integer division or modulo by zero\x1b[0m""", output)
-
-    def test_should_
