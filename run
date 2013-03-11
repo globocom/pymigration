@@ -1,18 +1,22 @@
 #!/bin/bash
 
 unit () {
-    nosetests tests/unitario -c .noserc
+    nosetests tests/unit -c .noserc --with-spec --spec-color
 }
 
-acception () {
+acceptance () {
     python setup.py install
-    nosetests tests/acception --with-spec --spec-color
+    nosetests tests/acceptance  --with-spec --spec-color
+}
+
+clean () {
+    find . -iname '*.pyc' -delete
 }
 
 if [ $1 ]; then
     $1 $2 $3 $4 $5;
 else
-    echo  "   acception - runner acception tests"
+    echo  "   acceptance - runner acceptance tests"
     echo  "   unit - runner unit tests"
     exit 1
 fi;

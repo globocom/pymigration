@@ -22,7 +22,7 @@ setup(name='pymigration',
       author_email='busca@corp.globo.com',
       url='',
       license='MIT',
-      packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+      packages=find_packages(exclude=['ez_setup', 'examples', 'tests', 'pymigrations']),
       include_package_data=True,
       zip_safe=False,
       install_requires=[

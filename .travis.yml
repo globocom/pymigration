@@ -1,10 +1,9 @@
 language: python
 python:
   - "2.7"
-# command to install dependencies
 install: "pip install -r test-requirements.txt --use-mirrors"
 # command to run tests
-script: nosetests
+script: python setup.py install && nosetests tests/unit tests/acception
 
 branches:
   only:

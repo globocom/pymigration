@@ -124,4 +124,4 @@ Install package in 'development mode' and run tests with _run_::
     $ ./run unit
 
 
-[![Build Status](https://travis-ci.org/luizgpsantos/pymigration.png)](https://travis-ci.org/luizgpsantos/pymigration)
+[![Build Status](https://api.travis-ci.org/globocom/pymigration.png)](https://api.travis-ci.org/globocom/pymigration)
