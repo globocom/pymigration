@@ -87,7 +87,7 @@ file will be used as unique identifier:
 
     $ pymigration --to=00.00.01
 
-If you don’t specify any version, use --up or --down, Pymigration will migrate 
+If you don’t specify any version, using --up or --down, Pymigration will migrate 
 the schema to the latest version available in the migrations directories 
 specified in the config file.
 
