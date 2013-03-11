@@ -2,6 +2,8 @@
 
 import unittest2
 import os
+import difflib
+
 
 from commands import getoutput
 
@@ -12,22 +14,26 @@ def shell(command):
     return getoutput("cd {PROJECT_PATH} && {command}".format(PROJECT_PATH=PROJECT_PATH, command=command))
 
 
-class TestMigrations(unittest2.TestCase):
+class TestDiscovererMigration(unittest2.TestCase):
+
+    def assertTextEqual(self, first, second, msg=None):
+        diff = "\n\n" + ''.join(difflib.ndiff(first.splitlines(1), second.splitlines(1)))
+        self.assertEqual(first.strip(), second.strip(), msg or diff)
 
     def setUp(self):
         pass
 
     def test_should_perform_the_migrations_up_command(self):
         output = shell("pymigration -u")
-        self.assertIn("Starting migration up!", output)
+        self.assertIn("Running command: pymigration -u", output)
 
     def test_should_perform_the_migrations_down_command(self):
         output = shell("pymigration -d")
-        self.assertIn("Starting migration down!", output)
+        self.assertIn("Running command: pymigration -d", output)
 
     def test_should_get_current_version(self):
         output = shell("pymigration -c")
-        self.assertEqual("0.0.1", output)
+        self.assertIn("0.0.1", output)
 
     def test_should_displays_pymigrations_version(self):
         output = shell("pymigration -v")
@@ -35,14 +41,7 @@ class TestMigrations(unittest2.TestCase):
 
     def test_should_use_command_up_and_no_execute_migrations_of_tests_only_list(self):
         output = shell("pymigration -u --no-exec")
-        list_migrations = """Listing migrations
-
-0.0.1           - hello_world.py
-                  migrate all the world of test
-                  greetings world
-                  up - HeLo World
-                       and migrate the world
-
+        list_migrations = """Running command: pymigration -u --no-exec
 
 0.0.2           - bla_bla_bla.py
                   Bla Bla Bla
@@ -55,28 +54,39 @@ class TestMigrations(unittest2.TestCase):
                   up - Bye World
                        and destroy the world
 """
-        self.assertEqual(list_migrations.strip(), output.strip(), "\n"+output)
+        self.assertTextEqual(list_migrations.strip(), output.strip())
 
     def test_should_use_command_down_and_no_execute_migrantions_of_test_only_list(self):
         output = shell("pymigration -d --no-exec")
-        list_migrations = """Listing migrations
+        list_migrations = """Running command: pymigration -d --no-exec
 
 0.0.1           - hello_world.py
                   migrate all the world of test
                   greetings world
                   down - roolback the world
+"""
+        self.assertTextEqual(list_migrations.strip(), output.strip())
 
+
+    def test_should_use_command_up_and_must_pass_a_version_to_go(self):
+        output = shell("pymigration --to 0.0.2 --no-exec")
+        returned_message = """Running command: pymigration --to 0.0.2 --no-exec
 
 0.0.2           - bla_bla_bla.py
                   Bla Bla Bla
-                  down - roolback the bla bla bla
-
-
-0.0.3           - bye_world.py
-                  bye world
-                  down - recreate the world
+                  up - Start dialogue
+                       Bla Bla Bla
 """
-        self.assertEqual(list_migrations.strip(), output.strip(), "\n"+output)
+        self.assertTextEqual(returned_message, output)
 
+    def test_should_use_command_down_and_must_pass_a_version_to_go(self):
+        output = shell("pymigration --to 0.0.0 --no-exec")
+        returned_message = """Running command: pymigration --to 0.0.0 --no-exec
 
-    
+0.0.1           - hello_world.py
+                  migrate all the world of test
+                  greetings world
+                  down - roolback the world
+"""
+        self.assertTextEqual(returned_message, output)
+

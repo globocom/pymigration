@@ -2,87 +2,112 @@
 
 import pymigrations
 import inspect
-from textwrap import dedent
 
+from os.path import basename
 from pymigrations import conf
 from importlib import import_module
 from modulefinder import ModuleFinder
-from os.path import basename
 
-class Migrations(object):
 
-    def __init__(self, execute=True):
+class DiscovererMigration(object):
+
+    def __init__(self, execute=True, version_to=None, **kwargs):
         self.execute = execute
+        self.version_to = version_to
+        self.current_version = Version().get_current()
 
-    def upgrade(self, version=0):
-        if self.execute:
-            print "Starting migration up!"
-        else:
-            print "Listing migrations"
-            self._list_of_migrations_up()
+    def down_migrations(self, version=0):
+        for migration_file in self.migrations_files(reverse=True):
+            migration = MigrationWrapper(migration_file,  execute=self.execute)
+            if migration.version <= self.current_version:
+                yield migration
 
-    def downgrade(self, version=0):
-        if self.execute:
-            print "Starting migration down!"
-        else:
-            print "Listing migrations"
-            self._list_of_migrations_down()
+    def up_migrations(self, version=0):
+        for migration_file in self.migrations_files():
+            migration =  MigrationWrapper(migration_file,  execute=self.execute)
+            if migration.version > self.current_version:
+                yield migration
 
-    def get_current_version(self):
-        if getattr(conf, "current_version", None):
-            print conf.current_version()
-        else:
-            path = "%s/current_version.txt" % conf.folder
-            with open(path, "r+") as f:
-                content = f.read()
-                print content
-
-    def migrations_files(self):
+    def migrations_files(self, reverse=False):
         finder = ModuleFinder()
         submodules_names = finder.find_all_submodules(pymigrations)
         submodules_names.remove("conf")
         submodules = [import_module("pymigrations.%s" % name) for name in submodules_names]
-        submodules = sorted(submodules, key=lambda s: s.version)
+        submodules = sorted(submodules, key=lambda s: s.version, reverse=reverse)
         return submodules
 
-    def _list_of_migrations_up(self):
-        for migration in self.migrations_files():
-            print FormatterMessage(migration).message_up()
+    def to_migrations(self):
+        reverse = self.is_down()
+        for migration_file in self.migrations_files(reverse):
+            migration = MigrationWrapper(migration_file, execute=self.execute)
+            if self.is_up():
+                if self.current_version < migration.version <= self.version_to:
+                    yield migration
+            if self.is_down():
+                if self.current_version >= migration.version > self.version_to:
+                    yield migration
 
-    def _list_of_migrations_down(self):
-        for migration in self.migrations_files():
-            print FormatterMessage(migration).message_down()
+    def is_up(self):
+        return self.version_to > self.current_version
 
-
-class FormatterMessage(object):
-
-    def __init__(self, submodule):
-        self.doc_migragtion = self.ident(inspect.getdoc(submodule))
-        self.doc_up = self.ident(inspect.getdoc(submodule.up), 23).strip()
-        self.doc_down = self.ident(inspect.getdoc(submodule.down), 23).strip()
-        self.version_migrate = "{:<15}".format(str(submodule.version))
-        self.archive_name = basename(submodule.__file__.replace('.pyc', '.py'))
-
-    def message_up(self):
-        output = """
-{self.version_migrate} - {self.archive_name}
-{self.doc_migragtion}
-                  up - {self.doc_up}
-""".format(self=self)
-        return output
-
-    def message_down(self):
-        output = """
-{self.version_migrate} - {self.archive_name}
-{self.doc_migragtion}
-                  down - {self.doc_down}
-""".format(self=self)
-        return output
+    def is_down(self):
+        return self.version_to < self.current_version
 
 
-    def ident(self, text, space=18):
-        text = dedent(text)
-        lines = text.split("\n")
-        text_ident = " "*space
-        text = text_ident + ("\n" + text_ident).join(lines)
-        return text
+class MigrationWrapper(object):
+
+    def __init__(self, migration_file, execute=True):
+        self.migration_file = migration_file
+        self.execute = execute
+
+    def __repr__(self):
+        return self.filename()
+
+    def __eq__(self, migration):
+        return self.migration_file == migration.migration_file
+
+    def up(self):
+        if self.execute:
+            self.migration_file.up()
+
+    def down(self):
+        if self.execute:
+            self.migration_file.down()
+
+    def header(self):
+        return inspect.getdoc(self.migration_file)
+
+    def doc_up(self):
+        return inspect.getdoc(self.migration_file.up)
+
+    def doc_down(self):
+        return inspect.getdoc(self.migration_file.down)
+
+    @property
+    def version(self):
+        return self.migration_file.version
+
+    def filename(self):
+        return basename(self.migration_file.__file__.replace('.pyc', '.py'))
+
+
+class Version(object):
+
+    def set_current(self, version):
+        if getattr(conf, "set_current_version", None):
+            return conf.set_current_version()
+        else:
+            path = "%s/current_version.txt" % conf.folder
+            with open(path, "w") as f:
+                content = f.write(version)
+            return content
+
+    def get_current(self):
+        if getattr(conf, "current_version", None):
+            return conf.current_version()
+        else:
+            path = "%s/current_version.txt" % conf.folder
+            with open(path, "r+") as f:
+                content = f.read()
+            return content
+    
