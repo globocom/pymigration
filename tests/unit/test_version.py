@@ -21,7 +21,10 @@ class TestVersion(UnitTestCase):
         pymigrations.conf.current_version = original_current_version
 
     def test_should_get_method_set_the_current_version_in_configuration(self):
-        self.assertEqual("0.0.1", self.version.set_current("0.0.1"))
+        original_current_version = pymigrations.conf.current_version()
+        self.version.set_current("0.0.2")
+        self.assertEqual("0.0.2", self.version.get_current())
+        self.version.set_current(original_current_version)
 
     def test_should_set_the_current_version_in_dot_txt(self):
         original_set_current_version = pymigrations.conf.set_current_version

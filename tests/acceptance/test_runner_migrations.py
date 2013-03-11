@@ -4,8 +4,8 @@ import unittest2
 import os
 import difflib
 
-
 from commands import getoutput
+from pymigration.model import Version
 
 
 PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
@@ -21,7 +21,10 @@ class TestDiscovererMigration(unittest2.TestCase):
         self.assertEqual(first.strip(), second.strip(), msg or diff)
 
     def setUp(self):
-        pass
+        Version().set_current("0.0.1")
+
+    def tearDown(self):
+        Version().set_current("0.0.1")
 
     def test_should_perform_the_migrations_up_command(self):
         output = shell("pymigration -u")

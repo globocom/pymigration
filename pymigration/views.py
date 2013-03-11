@@ -3,6 +3,8 @@
 from textwrap import dedent
 import sys
 
+import termcolor
+
 
 class FormatterMessage(object):
 
@@ -37,6 +39,14 @@ class FormatterMessage(object):
         text = text_ident + ("\n" + text_ident).join(lines)
         return text
 
+    def message_error_up(self, error):
+        message_error = termcolor.colored(self.message_up() + "\n" + str(error), "red")
+        return message_error
+
+    def message_error_down(self, error):
+        message_error = termcolor.colored(self.message_down() + "\n" + str(error), "red")
+        return message_error
+
 
 class TerminalMessages(object):
 
@@ -52,3 +62,9 @@ class TerminalMessages(object):
 
     def down_message(self, migration):
         print FormatterMessage(migration).message_down()
+
+    def error_message_up(self, migration, error):
+        print FormatterMessage(migration).message_error_up(error)
+
+    def error_message_down(self, migration, error):
+        print FormatterMessage(migration).message_error_down(error)

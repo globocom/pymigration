@@ -10,6 +10,7 @@ def up():
         Start dialogue
         Bla Bla Bla
     """
+    1 / 0
     print "Bla Bla Bla"
 
 def down():
