@@ -82,8 +82,8 @@ Migrating to a specific version
 ===============================
 
 If you want, you can migrate your database schema to a specific version by 
-supplying the --to (or -t) parameter. The version id is the var identifier
-used at the migration file:
+informing the --to (or -t) parameter. The attribute _version_ of the migration
+file will be used as unique identifier:
 
     $ pymigration --to=00.00.01
 
@@ -96,7 +96,8 @@ specified in the config file.
 Supported databases engines
 ===========================
 
-You can use this project to run migrations on MySQL, Oracle, MS-SQL, redis, filesystem, solr, elasticsearch or any database server.
+You can use this project to run migrations on MySQL, Oracle, MS-SQL, redis, filesystem, 
+solr, elasticsearch or any database server.
 
 
 Getting involved !
