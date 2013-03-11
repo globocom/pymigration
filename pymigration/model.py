@@ -69,10 +69,12 @@ class MigrationWrapper(object):
     def up(self):
         if self.execute:
             self.migration_file.up()
+            Version().set_current(self.version)
 
     def down(self):
         if self.execute:
             self.migration_file.down()
+            Version().set_current(self.version)
 
     def header(self):
         return inspect.getdoc(self.migration_file)
@@ -95,7 +97,7 @@ class Version(object):
 
     def set_current(self, version):
         if getattr(conf, "set_current_version", None):
-            return conf.set_current_version()
+            return conf.set_current_version(version)
         else:
             path = "%s/current_version.txt" % conf.folder
             with open(path, "w") as f:
@@ -110,4 +112,3 @@ class Version(object):
             with open(path, "r+") as f:
                 content = f.read()
             return content
-    

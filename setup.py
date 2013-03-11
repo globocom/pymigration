@@ -26,7 +26,7 @@ setup(name='pymigration',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          # -*- Extra requirements: -*-
+          "termcolor"
       ],
 
       entry_points={
