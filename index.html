@@ -31,11 +31,122 @@
         <hr>
 
         <section id="main_content">
-          <h1>Pymigration</h1>
+          <p><a href="https://api.travis-ci.org/globocom/pymigration"><img src="https://api.travis-ci.org/globocom/pymigration.png" alt="Build Status"></a></p>
+
+<h1>Pymigration</h1>
 
 <p>A generic tool for migrate in python.</p>
 
-<p><a href="https://travis-ci.org/globocom/pymigration"><img src="https://travis-ci.org/globocom/pymigration.png" alt="Build Status"></a></p>
+<p>Pymigration brings migrations to Python applications. Its main objectives are to provide a simple, stable and database-independent migration layer to prevent all the hassle schema changes over time bring to your applications.</p>
+
+<p>We try to make Pymigration both as easy-to-use and intuitive as possible, by making it automate most of your schema-changing tasks, while at the same time providing a powerful set of tools for large or complex projects.</p>
+
+<h1>Install</h1>
+
+<p>If you have pip available on your system, just type::</p>
+
+<pre><code>pip install pymigration
+</code></pre>
+
+<p>If you’ve already got an old version of pymigration, and want to upgrade, use:</p>
+
+<pre><code>pip install --upgrade pymigration
+</code></pre>
+
+<h1>Understanding how it works</h1>
+
+<p>The first thing you’ll need is a migration file. There are some example 
+migration files in the “pymigrations” directory. The migration files 
+have the following format::</p>
+
+<pre><code># -*- coding: utf-8 -*-
+#hello_world.py
+
+"""
+    migrate all the world of test
+    greetings world
+"""
+
+version = "0.0.1"
+
+def up():
+    """ HeLo World and migrate the world """
+    print "HeLo World and migrate the world"
+
+def down():
+    """roolback the world"""
+    print "Bye World and roolback the world"
+</code></pre>
+
+<p>Pymigration uses the <em>version</em> information to track the migrations schema and to 
+decide the order of execution of the scripts. Pymigration will go through all .py 
+files in your directory and execute all of them in their creation (date) order.</p>
+
+<p>Second, you have to configure access to your current version so Pymigration can execute DDL. 
+Just create a file named “conf.py”, with the following content 
+(there is also an example in the “pymigration” directory):</p>
+
+<pre><code># -*- coding: utf-8 -*-
+import settings
+
+folder = "{PATH_PYMIGRATION}/version.txt".format(**vars(settings))
+</code></pre>
+
+<p>It is possible to override the way Pymigration retrieve the current version. To do so,
+you just need do implement the methods get_current_version and set_current_version:</p>
+
+<pre><code># -*- coding: utf-8 -*-
+
+folder = "/version_folder"
+
+def get_current_version():
+    with open("{folder}/version.txt".format(folder=folder)) as f:
+        version = f.read()
+    return version
+
+def set_current_version(version):
+    with open("{folder}/version.txt".format(folder=folder)) as f:
+        f.write(version)
+</code></pre>
+
+<h1>Migrating to a specific version</h1>
+
+<p>If you want, you can migrate your database schema to a specific version by 
+informing the --to (or -t) parameter. The attribute <em>version</em> of the migration
+file will be used as unique identifier:</p>
+
+<pre><code>$ pymigration --to=00.00.01
+</code></pre>
+
+<p>If you don’t specify any version, using --up or --down, Pymigration will migrate 
+the schema to the latest version available in the migrations directories 
+specified in the config file.</p>
+
+<h1>Supported databases engines</h1>
+
+<p>You can use this project to run migrations on MySQL, Oracle, MS-SQL, redis, filesystem, 
+solr, elasticsearch or any database server.</p>
+
+<p>You can do anything!</p>
+
+<h1>Getting involved !</h1>
+
+<p>Pymigration's development may be viewed and followed on github::</p>
+
+<pre><code>http://github.com/globocom/pymigration
+</code></pre>
+
+<p>Retrieve the source code using 'git'::</p>
+
+<pre><code>$ git clone git@github.com:globocom/pymigration.git
+</code></pre>
+
+<p>Install package in 'development mode' and run tests with <em>run</em>::</p>
+
+<pre><code>$ git clone git@github.com:globocom/pymigration.git
+$ cd pymigration
+$ ./run unit
+</code></pre>
         </section>
 
         <footer>
