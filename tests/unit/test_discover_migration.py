@@ -3,7 +3,7 @@
 import pymigrations.conf
 
 from pymigration.model import DiscovererMigration, MigrationWrapper
-from pymigrations import bla_bla_bla, bye_world, hello_world
+from pymigrations import bla_bla_bla, bye_world, hello_world, exception
 from unittestcase import UnitTestCase
 
 
@@ -17,7 +17,7 @@ class TestDiscovererMigrationMidleVersion(UnitTestCase):
         pymigrations.conf.current_version = self.old_current_version
 
     def test_should_upgrade(self):
-        self.assertEqual([MigrationWrapper(bye_world)], list(self.discover_migrations.up_migrations()))
+        self.assertEqual([MigrationWrapper(bye_world), MigrationWrapper(exception)], list(self.discover_migrations.up_migrations()))
 
     def test_should_downgrade(self):
         self.assertListEqual([MigrationWrapper(bla_bla_bla), MigrationWrapper(hello_world)], list(self.discover_migrations.down_migrations()))
@@ -29,20 +29,18 @@ class TestDiscovererMigration(UnitTestCase):
         self.discover_migrations = DiscovererMigration()
 
     def test_should_upgrade(self):
-        self.assertEqual([ MigrationWrapper(bla_bla_bla), MigrationWrapper(bye_world)], list(self.discover_migrations.up_migrations()))
+        self.assertEqual([ MigrationWrapper(bla_bla_bla), MigrationWrapper(bye_world), MigrationWrapper(exception)], list(self.discover_migrations.up_migrations()))
 
     def test_should_downgrade(self):
         self.assertListEqual([MigrationWrapper(hello_world)], list(self.discover_migrations.down_migrations()))
 
-    
-
     def test_should_get_migrations_files(self):
         submodules = self.discover_migrations.migrations_files()            
-        self.assertListEqual([hello_world, bla_bla_bla, bye_world], submodules)
+        self.assertListEqual([hello_world, bla_bla_bla, bye_world, exception], submodules)
 
     def test_should_get_migrations_files_in_reverse(self):
         submodules = self.discover_migrations.migrations_files(reverse=True)
-        self.assertListEqual([bye_world, bla_bla_bla, hello_world], submodules)
+        self.assertListEqual([exception, bye_world, bla_bla_bla, hello_world], submodules)
 
     def test_should_method_is_up(self):
         discover_migrations = DiscovererMigration(version_to='1.0.6')
