@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/globocom/pymigration.png)](https://api.travis-ci.org/globocom/pymigration)
+
 Pymigration
 ===========
 
@@ -11,15 +13,13 @@ We try to make Pymigration both as easy-to-use and intuitive as possible, by mak
 Install
 =======
 
-If you have easy_install  or pip available on your system, just type:
+If you have pip available on your system, just type::
 
-_easy_install pymigration_ or _pip install pymigration_
+    pip install pymigration
 
 If you’ve already got an old version of pymigration, and want to upgrade, use:
 
-_easy_install -U pymigration_ or _pip install --upgrade pymigration_
-
-Test using the command with "pymigration -h"
+    pip install --upgrade pymigration
 
 
 
@@ -62,8 +62,15 @@ Just create a file named “conf.py”, with the following content
 
     folder = "{PATH_PYMIGRATION}/version.txt".format(**vars(settings))
 
+It is possible to override the way Pymigration retrieve the current version. To do so,
+you just need do implement the methods get_current_version and set_current_version:
+
+    # -*- coding: utf-8 -*-
+
+    folder = "/version_folder"
+
     def get_current_version():
-        with open("{folder}/version.txt".format(folder=folder))) as f:
+        with open("{folder}/version.txt".format(folder=folder)) as f:
             version = f.read()
         return version
 
@@ -71,28 +78,18 @@ Just create a file named “conf.py”, with the following content
         with open("{folder}/version.txt".format(folder=folder)) as f:
             f.write(version)
 
-You don’t need to create the methods get and set for current_version. Pymigration
-will create it for you. 
-If you don’t want to write methods get and set, you can specify its path instead. 
-Note that this also makes it possible to use any database you like for the current version::
-
-    # -*- coding: utf-8 -*-
-    import settings
-
-    folder = "{PATH_PYMIGRATION}/version.txt".format(**vars(settings))
-
 
 
 Migrating to a specific version
 ===============================
 
 If you want, you can migrate your database schema to a specific version by 
-supplying the --to (or -t) parameter. The version id is the var identifier
-used at the migration file:
+informing the --to (or -t) parameter. The attribute _version_ of the migration
+file will be used as unique identifier:
 
     $ pymigration --to=00.00.01
 
-If you don’t specify any version, use --up or --down, Pymigration will migrate 
+If you don’t specify any version, using --up or --down, Pymigration will migrate 
 the schema to the latest version available in the migrations directories 
 specified in the config file.
 
@@ -101,7 +98,10 @@ specified in the config file.
 Supported databases engines
 ===========================
 
-You can use this project to run migrations on MySQL, Oracle, MS-SQL, redis, filesystem, solr, elasticsearch or any database server.
+You can use this project to run migrations on MySQL, Oracle, MS-SQL, redis, filesystem, 
+solr, elasticsearch or any database server.
+
+You can do anything!
 
 
 Getting involved !
@@ -123,4 +123,4 @@ Install package in 'development mode' and run tests with _run_::
     $ ./run unit
 
 
-[![Build Status](https://api.travis-ci.org/globocom/pymigration.png)](https://api.travis-ci.org/globocom/pymigration)
+
