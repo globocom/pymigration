@@ -1,0 +1,10 @@
+-r requirements.txt
+
+unittest2
+pep8
+pylint
+pyflakes
+nose
+coverage
+NoseXML
+pinocchio
