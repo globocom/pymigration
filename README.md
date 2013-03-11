@@ -11,15 +11,13 @@ We try to make Pymigration both as easy-to-use and intuitive as possible, by mak
 Install
 =======
 
-If you have easy_install  or pip available on your system, just type:
+If you have pip available on your system, just type::
 
-_easy_install pymigration_ or _pip install pymigration_
+    pip install pymigration
 
 If you’ve already got an old version of pymigration, and want to upgrade, use:
 
-_easy_install -U pymigration_ or _pip install --upgrade pymigration_
-
-Test using the command with "pymigration -h"
+    pip install --upgrade pymigration
 
 
 
