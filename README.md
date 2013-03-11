@@ -1,4 +1,3 @@
-
 Pymigration
 ===========
 
@@ -18,7 +17,7 @@ _easy_install pymigration_ or _pip install pymigration_
 
 If you’ve already got an old version of pymigration, and want to upgrade, use:
 
-_easy_install -U pymigration_ or _pip install --upgrade pymigration__
+_easy_install -U pymigration_ or _pip install --upgrade pymigration_
 
 Test using the command with "pymigration -h"
 
@@ -74,8 +73,8 @@ Just create a file named “conf.py”, with the following content
 
 You don’t need to create the methods get and set for current_version. Pymigration
 will create it for you. 
-If you don’t want to write methods get and set, you can specify it path instead. 
-Note that this also makes it possible to use any database you like for the currutent version::
+If you don’t want to write methods get and set, you can specify its path instead. 
+Note that this also makes it possible to use any database you like for the current version::
 
     # -*- coding: utf-8 -*-
     import settings
@@ -88,7 +87,7 @@ Migrating to a specific version
 ===============================
 
 If you want, you can migrate your database schema to a specific version by 
-supplying the —-to (or -t) parameter. The version id is the var identifier
+supplying the --to (or -t) parameter. The version id is the var identifier
 used at the migration file:
 
     $ pymigration --to=00.00.01
@@ -102,7 +101,7 @@ specified in the config file.
 Supported databases engines
 ===========================
 
-You can use this project to run migrations on MySQL, Oracle, MS-SQL, redis, filesystem, solr, elasticsearch or any server databases.
+You can use this project to run migrations on MySQL, Oracle, MS-SQL, redis, filesystem, solr, elasticsearch or any database server.
 
 
 Getting involved !
