@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/globocom/pymigration.png)](https://api.travis-ci.org/globocom/pymigration)
+
 Pymigration
 ===========
 
@@ -99,6 +101,8 @@ Supported databases engines
 You can use this project to run migrations on MySQL, Oracle, MS-SQL, redis, filesystem, 
 solr, elasticsearch or any database server.
 
+You can do anything!
+
 
 Getting involved !
 ==================
@@ -119,4 +123,4 @@ Install package in 'development mode' and run tests with _run_::
     $ ./run unit
 
 
-[![Build Status](https://api.travis-ci.org/globocom/pymigration.png)](https://api.travis-ci.org/globocom/pymigration)
+
