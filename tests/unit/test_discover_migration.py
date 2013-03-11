@@ -36,15 +36,7 @@ class TestDiscovererMigration(UnitTestCase):
     def test_should_downgrade(self):
         self.assertListEqual([MigrationWrapper(hello_world)], list(self.discover_migrations.down_migrations()))
 
-    def test_should_get_current_version_in_configuration(self):
-        self.assertEqual("0.0.1", self.discover_migrations.get_current_version())
-
-    def test_should_get_current_version_in_current_version_dot_txt(self):
-        original_current_version = pymigrations.conf.current_version
-        del pymigrations.conf.current_version
-        pymigrations.conf.folder = "%s/pymigrations" % pymigrations.conf.abs_path
-        self.assertEqual("0.0.1", self.discover_migrations.get_current_version())
-        pymigrations.conf.current_version = original_current_version
+    
 
     def test_should_get_migrations_files(self):
         submodules = self.discover_migrations.migrations_files()

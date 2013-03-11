@@ -3,6 +3,7 @@
 from textwrap import dedent
 import sys
 
+
 class FormatterMessage(object):
 
     def __init__(self, submodule):
@@ -44,7 +45,7 @@ class TerminalMessages(object):
         print "Running command: pymigration %s" % " ".join(sys.argv[1:])
 
     def current_version(self):
-        print self.migrations.get_current_version()
+        print self.migrations.current_version
 
     def up_message(self, migration):
         print FormatterMessage(migration).message_up()

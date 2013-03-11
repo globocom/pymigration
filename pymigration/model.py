@@ -14,27 +14,19 @@ class DiscovererMigration(object):
     def __init__(self, execute=True, version_to=None, **kwargs):
         self.execute = execute
         self.version_to = version_to
+        self.current_version = Version().get_current()
 
     def down_migrations(self, version=0):
         for migration_file in self.migrations_files(reverse=True):
             migration = MigrationWrapper(migration_file,  execute=self.execute)
-            if migration.version <= self.get_current_version():
+            if migration.version <= self.current_version:
                 yield migration
 
     def up_migrations(self, version=0):
         for migration_file in self.migrations_files():
             migration =  MigrationWrapper(migration_file,  execute=self.execute)
-            if migration.version > self.get_current_version():
+            if migration.version > self.current_version:
                 yield migration
-
-    def get_current_version(self):
-        if getattr(conf, "current_version", None):
-            return conf.current_version()
-        else:
-            path = "%s/current_version.txt" % conf.folder
-            with open(path, "r+") as f:
-                content = f.read()
-                return content
 
     def migrations_files(self, reverse=False):
         finder = ModuleFinder()
@@ -49,17 +41,17 @@ class DiscovererMigration(object):
         for migration_file in self.migrations_files(reverse):
             migration = MigrationWrapper(migration_file, execute=self.execute)
             if self.is_up():
-                if self.get_current_version() < migration.version <= self.version_to:
+                if self.current_version < migration.version <= self.version_to:
                     yield migration
             if self.is_down():
-                if self.get_current_version() >= migration.version > self.version_to:
+                if self.current_version >= migration.version > self.version_to:
                     yield migration
 
     def is_up(self):
-        return self.version_to > self.get_current_version()
+        return self.version_to > self.current_version
 
     def is_down(self):
-        return self.version_to < self.get_current_version()
+        return self.version_to < self.current_version
 
 
 class MigrationWrapper(object):
@@ -97,3 +89,25 @@ class MigrationWrapper(object):
 
     def filename(self):
         return basename(self.migration_file.__file__.replace('.pyc', '.py'))
+
+
+class Version(object):
+
+    def set_current(self, version):
+        if getattr(conf, "set_current_version", None):
+            return conf.set_current_version()
+        else:
+            path = "%s/current_version.txt" % conf.folder
+            with open(path, "w") as f:
+                content = f.write(version)
+            return content
+
+    def get_current(self):
+        if getattr(conf, "current_version", None):
+            return conf.current_version()
+        else:
+            path = "%s/current_version.txt" % conf.folder
+            with open(path, "r+") as f:
+                content = f.read()
+            return content
+    
