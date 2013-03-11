@@ -4,8 +4,8 @@ import unittest2
 import os
 import difflib
 
-
 from commands import getoutput
+from pymigration.model import Version
 
 
 PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
@@ -21,7 +21,10 @@ class TestDiscovererMigration(unittest2.TestCase):
         self.assertEqual(first.strip(), second.strip(), msg or diff)
 
     def setUp(self):
-        pass
+        Version().set_current("0.0.1")
+
+    def tearDown(self):
+        Version().set_current("0.0.1")
 
     def test_should_perform_the_migrations_up_command(self):
         output = shell("pymigration -u")
@@ -53,6 +56,11 @@ class TestDiscovererMigration(unittest2.TestCase):
                   bye world
                   up - Bye World
                        and destroy the world
+
+
+0.0.4           - exception.py
+                  Test for raise a exception
+                  up - Starting exeception
 """
         self.assertTextEqual(list_migrations.strip(), output.strip())
 
@@ -90,3 +98,37 @@ class TestDiscovererMigration(unittest2.TestCase):
 """
         self.assertTextEqual(returned_message, output)
 
+    def test_should_use_command_up_and_raise_exception(self):
+        Version().set_current("0.0.3")
+        output = shell("pymigration -u")
+        self.assertTextEqual("""Running command: pymigration -u
+\x1b[31m
+0.0.4           - exception.py
+                  Test for raise a exception
+                  up - Starting exeception
+
+integer division or modulo by zero\x1b[0m""", output)
+
+    def test_should_use_command_down_and_raise_exception(self):
+        Version().set_current("0.0.5")
+        output = shell("pymigration -d")
+        self.assertTextEqual("""Running command: pymigration -d
+\x1b[31m
+0.0.4           - exception.py
+                  Test for raise a exception
+                  down - Rollback and raise exception
+
+integer division or modulo by zero\x1b[0m""", output)
+        
+    def test_should_use_command_to_version_and_raise_exception(self):
+        Version().set_current("0.0.3")
+        output = shell("pymigration --to 0.0.4")
+        self.assertTextEqual("""Running command: pymigration --to 0.0.4
+\x1b[31m
+0.0.4           - exception.py
+                  Test for raise a exception
+                  up - Starting exeception
+
+integer division or modulo by zero\x1b[0m""", output)
+
+    def test_should_

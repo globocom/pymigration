@@ -17,7 +17,7 @@ def pymigration():
                       help="Execute python methods to upgrade shema of sistem.")
 
     parser.add_argument("--no-exec", default=True, dest="execute", action="store_false",
-                        help="If u want only see the list of migrantions command.")
+                        help="If you want only see the list of migrantions command.")
 
     parser.add_argument("-d", "--down", dest="down", default=False, action="store_true",
                       help="Displays simple-db-migrate's version and exit.")
@@ -29,24 +29,31 @@ def pymigration():
                       help="Displays pymigration's version and exit.", action="store_true")
 
     parser.add_argument("-t", "--to", dest="version_to", default=None,
-                    help="Displays pymigration's version and exit.")
+                    help="Migrate to specific version .")
 
     args = parser.parse_args()
 
     if args.version:
         print version
+
     migrations = DiscovererMigration(**vars(args))
     terminal_message = TerminalMessages(migrations, **vars(args))
 
     if args.down:
-        for migration in migrations.down_migrations():
-            migration.down()
-            terminal_message.down_message(migration)
+        try:
+            for migration in migrations.down_migrations():
+                migration.down()
+                terminal_message.down_message(migration)
+        except Exception, e:
+            terminal_message.error_message_down(migration, e)
 
     if args.up:
-        for migration in migrations.up_migrations():
-            migration.up()
-            terminal_message.up_message(migration)
+        try:
+            for migration in migrations.up_migrations():
+                migration.up()
+                terminal_message.up_message(migration)
+        except Exception, e:
+            terminal_message.error_message_up(migration, e)
 
     if args.current_version:
         terminal_message.current_version()
@@ -54,11 +61,17 @@ def pymigration():
     if args.version_to:
         for migration in migrations.to_migrations():
             if migrations.is_up():
-                migration.up()
-                terminal_message.up_message(migration)
-            else:
-                migration.down()
-                terminal_message.down_message(migration)
+                try:
+                    migration.up()
+                    terminal_message.up_message(migration)
+                except Exception, e:
+                    terminal_message.error_message_up(migration, e)
+                    break
 
-
-
+            elif migrations.is_down():
+                try:
+                    migration.down()
+                    terminal_message.down_message(migration)
+                except Exception, e:
+                    terminal_message.error_message_down(migration, e)
+                    break
