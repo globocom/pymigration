@@ -56,27 +56,25 @@ Just create a file named “conf.py”, with the following content
 (there is also an example in the “pymigration” directory):
 
     # -*- coding: utf-8 -*-
+    import settings
 
-    folder = "/version_folder/"
+    folder = "{PATH_PYMIGRATION}/version.txt".format(**vars(settings))
+
+It is possible to override the way Pymigration retrieve the current version. To do so,
+you just need do implement the methods get_current_version and set_current_version:
+
+    # -*- coding: utf-8 -*-
+
+    folder = "/version_folder"
 
     def get_current_version():
-        with open("{folder}/version.txt".format(folder=folder))) as f:
+        with open("{folder}/version.txt".format(folder=folder)) as f:
             version = f.read()
         return version
 
     def set_current_version(version):
         with open("{folder}/version.txt".format(folder=folder)) as f:
             f.write(version)
-
-You don’t need to create the methods get and set for current_version. Pymigration
-will create it for you. 
-If you don’t want to write methods get and set, you can specify its path instead. 
-Note that this also makes it possible to use any database you like for the current version::
-
-    # -*- coding: utf-8 -*-
-    import settings
-
-    folder = "{PATH_PYMIGRATION}/version.txt".format(**vars(settings))
 
 
 
