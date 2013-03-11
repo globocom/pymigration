@@ -56,9 +56,8 @@ Just create a file named “conf.py”, with the following content
 (there is also an example in the “pymigration” directory):
 
     # -*- coding: utf-8 -*-
-    import settings
 
-    folder = "{PATH_PYMIGRATION}/version.txt".format(**vars(settings))
+    folder = "/version_folder/"
 
     def get_current_version():
         with open("{folder}/version.txt".format(folder=folder))) as f:
