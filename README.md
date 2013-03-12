@@ -23,8 +23,8 @@ If you’ve already got an old version of pymigration, and want to upgrade, use:
 
 
 
-Understanding how it works
-==========================
+Understanding how to use
+========================
 
 The first thing you’ll need is a migration file. There are some example 
 migration files in the “pymigrations” directory. The migration files 
@@ -95,13 +95,11 @@ specified in the config file.
 
 
 
-Supported databases engines
-===========================
+You can do anything!
+====================
 
 You can use this project to run migrations on MySQL, Oracle, MS-SQL, redis, filesystem, 
 solr, elasticsearch or any database server.
-
-You can do anything!
 
 
 Getting involved !

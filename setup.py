@@ -1,26 +1,21 @@
-import os
+# -*- coding: utf-8 -*-
 
 from setuptools import setup, find_packages
 from pymigration.version import version
 
-def fullpath(*args):
-    project_path = os.path.dirname(__file__)
-    return os.path.join(project_path, *args)
 
-
-with open(fullpath("README.md")) as readme:
-    long_description = readme.read()
+long_description = "A generic tool for migrate in python. https://github.com/globocom/pymigration"
 
 
 setup(name='pymigration',
       version=version,
       description="A generic tool for migrate in python.",
       long_description=long_description,
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[],
       keywords='migration',
       author='Team Search of globo.com',
       author_email='busca@corp.globo.com',
-      url='',
+      url='https://github.com/globocom/pymigration',
       license='MIT',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests', 'pymigrations']),
       include_package_data=True,
