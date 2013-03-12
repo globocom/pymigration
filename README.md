@@ -30,8 +30,10 @@ The first thing you’ll need is a migration file. There are some example
 migration files in the “pymigrations” directory. The migration files 
 have the following format::
 
+The folder pymigrations need be a module(only create the __init__.py in folder).
+
+
     # -*- coding: utf-8 -*-
-    #hello_world.py
 
     """
         migrate all the world of test
