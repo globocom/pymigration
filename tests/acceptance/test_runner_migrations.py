@@ -2,11 +2,13 @@
 
 import unittest2
 import os
+import sys
 import difflib
 
 from commands import getoutput
 from pymigration.model import Version
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 
@@ -40,7 +42,7 @@ class TestDiscovererMigration(unittest2.TestCase):
 
     def test_should_displays_pymigrations_version(self):
         output = shell("pymigration -v")
-        self.assertIn("0.0.1", output)
+        self.assertIn("0.0.3", output)
 
     def test_should_use_command_up_and_no_execute_migrations_of_tests_only_list(self):
         output = shell("pymigration -u --no-exec")

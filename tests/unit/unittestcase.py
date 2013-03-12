@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import os
 import difflib
 import unittest2
 
 from StringIO import StringIO
 from contextlib import contextmanager
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 class UnitTestCase(unittest2.TestCase):
 

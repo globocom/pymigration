@@ -6,7 +6,7 @@ import os
 from argparse import ArgumentParser
 from pymigration.version import version
 sys.path.insert(0, os.getcwd())
-from pymigration.model import DiscovererMigration
+from pymigration.model import DiscovererMigration, Version
 from views import TerminalMessages
 
 
@@ -46,6 +46,8 @@ def pymigration():
                 terminal_message.down_message(migration)
         except Exception, e:
             terminal_message.error_message_down(migration, e)
+            sys.exit()
+        Version().set_current("0")
 
     if args.up:
         try:
@@ -66,7 +68,7 @@ def pymigration():
                     terminal_message.up_message(migration)
                 except Exception, e:
                     terminal_message.error_message_up(migration, e)
-                    break
+                    sys.exit()
 
             elif migrations.is_down():
                 try:
@@ -74,4 +76,5 @@ def pymigration():
                     terminal_message.down_message(migration)
                 except Exception, e:
                     terminal_message.error_message_down(migration, e)
-                    break
+                    sys.exit()
+        Version().set_current(args.version_to)
