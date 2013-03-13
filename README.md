@@ -71,7 +71,7 @@ you just need do implement the methods get_current_version and set_current_versi
 
     folder = "/version_folder"
 
-    def get_current_version():
+    def current_version():
         with open("{folder}/version.txt".format(folder=folder)) as f:
             version = f.read()
         return version
