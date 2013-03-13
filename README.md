@@ -30,7 +30,7 @@ The first thing you’ll need is a migration file. There are some example
 migration files in the “pymigrations” directory. The migration files 
 have the following format::
 
-The folder pymigrations need be a module(only create the __init__.py in folder).
+The folder pymigrations need be a module (\_\_init\_\_.py most be present in pymigrations folder).
 
 
     # -*- coding: utf-8 -*-
