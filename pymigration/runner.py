@@ -14,13 +14,13 @@ def pymigration():
 
     parser = ArgumentParser(description="Parameters to migrate.")
     parser.add_argument("-u", "--up", dest="up", default=False, action="store_true",
-                      help="Execute python methods to upgrade shema of sistem.")
+                      help="Execute python methods to upgrade schema of system.")
 
     parser.add_argument("--no-exec", default=True, dest="execute", action="store_false",
                         help="If you want only see the list of migrantions command.")
 
     parser.add_argument("-d", "--down", dest="down", default=False, action="store_true",
-                      help="Displays simple-db-migrate's version and exit.")
+                      help="Execute python methods to downgrade schema of system.")
 
     parser.add_argument("-c", "--current-version", dest="current_version", default=False,
                       help="Version of actual migration.", action="store_true")
