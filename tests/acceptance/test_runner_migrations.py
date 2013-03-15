@@ -63,6 +63,12 @@ class TestDiscovererMigration(unittest2.TestCase):
 0.0.4           - exception.py
                   Test for raise a exception
                   up - Starting exeception
+
+
+0.0.5           - without_docstring.py
+                  No docstring founded
+                  up - No docstring founded
+
 """
         self.assertTextEqual(list_migrations.strip(), output.strip())
 
@@ -112,7 +118,7 @@ class TestDiscovererMigration(unittest2.TestCase):
 integer division or modulo by zero\x1b[0m""", output)
 
     def test_should_use_command_down_and_raise_exception(self):
-        Version().set_current("0.0.5")
+        Version().set_current("0.0.4")
         output = shell("pymigration -d")
         self.assertTextEqual("""Running command: pymigration -d
 \x1b[31m

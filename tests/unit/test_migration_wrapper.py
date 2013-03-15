@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pymigration.model import MigrationWrapper
-from pymigrations import hello_world
+from pymigrations import hello_world, without_docstring
 from unittestcase import UnitTestCase
 
 
@@ -50,3 +50,10 @@ class TestMigrationWrapper(UnitTestCase):
 
     def test_should_show_represent_of_migration(self):
         self.assertEqual("hello_world.py", repr(self.migration))
+
+    def test_should_get_the_message_no_docstring_founded_if_developer_not_implemented_docstring_in_migration(self):
+        expected_message = "No docstring founded"
+        migration = MigrationWrapper(without_docstring)
+        self.assertEqual(expected_message, migration.header())
+        self.assertEqual(expected_message, migration.doc_up())
+        self.assertEqual(expected_message, migration.doc_down())
