@@ -41,9 +41,12 @@ def pymigration():
 
     if args.down:
         try:
-            for migration in migrations.down_migrations():
-                migration.down()
-                terminal_message.down_message(migration)
+            if list(migrations.down_migrations()):
+                for migration in migrations.down_migrations():
+                    migration.down()
+                    terminal_message.down_message(migration)
+            else:
+                print "No migrations need to be executed, already in %s version." % Version().get_current()
         except Exception, e:
             terminal_message.error_message_down(migration, e)
             sys.exit()
@@ -51,9 +54,12 @@ def pymigration():
 
     if args.up:
         try:
-            for migration in migrations.up_migrations():
-                migration.up()
-                terminal_message.up_message(migration)
+            if list(migrations.up_migrations()):
+                for migration in migrations.up_migrations():
+                    migration.up()
+                    terminal_message.up_message(migration)
+            else:
+                print "No migrations need to be executed, already in %s version." % Version().get_current()
         except Exception, e:
             terminal_message.error_message_up(migration, e)
 

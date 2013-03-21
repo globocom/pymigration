@@ -138,3 +138,8 @@ integer division or modulo by zero\x1b[0m""", output)
                   up - Starting exeception
 
 integer division or modulo by zero\x1b[0m""", output)
+
+    def test_should_return_feedback_to_user_when_no_have_migration_to_run(self):
+        Version().set_current("0.0.5")
+        output = shell("pymigration -u")
+        self.assertEqual("Running command: pymigration -u\nNo migrations need to be executed, already in 0.0.5 version.", output)
