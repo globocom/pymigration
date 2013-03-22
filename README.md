@@ -30,8 +30,10 @@ The first thing you’ll need is a migration file. There are some example
 migration files in the “pymigrations” directory. The migration files 
 have the following format::
 
+The folder pymigrations need be a module (\_\_init\_\_.py most be present in pymigrations folder).
+
+
     # -*- coding: utf-8 -*-
-    #hello_world.py
 
     """
         migrate all the world of test
@@ -69,7 +71,7 @@ you just need do implement the methods get_current_version and set_current_versi
 
     folder = "/version_folder"
 
-    def get_current_version():
+    def current_version():
         with open("{folder}/version.txt".format(folder=folder)) as f:
             version = f.read()
         return version
