@@ -16,7 +16,7 @@ class TestFormatterMessage(UnitTestCase):
 
     def test_should_format_a_message_down(self):
         migration = MigrationWrapper(migration_file=hello_world)
-        message = FormatterMessage(migration).message_up()
+        message = FormatterMessage(migration).message(method="up")
         expected_message = """
 0.0.1           - hello_world.py
                   migrate all the world of test
@@ -28,7 +28,7 @@ class TestFormatterMessage(UnitTestCase):
 
     def test_should_format_a_message_up(self):
         migration = MigrationWrapper(migration_file=hello_world)
-        message = FormatterMessage(migration).message_down()
+        message = FormatterMessage(migration).message(method="down")
         expected_message = """
 0.0.1           - hello_world.py
                   migrate all the world of test

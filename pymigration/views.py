@@ -15,22 +15,21 @@ class FormatterMessage(object):
         self.version_migrate = "{:<15}".format(str(submodule.version))
         self.archive_name = submodule.filename()
 
-    def message_up(self):
-        output = """
+    def message(self, method):
+        if method == "up":
+            output = """
 {self.version_migrate} - {self.archive_name}
 {self.doc_migration}
-                  up - {self.doc_up}
-""".format(self=self)
-        return output
-
-    def message_down(self):
-        output = """
+                  {method} - {self.doc_up}
+""".format(self=self, method=method)
+            return output
+        else:
+            output = """
 {self.version_migrate} - {self.archive_name}
 {self.doc_migration}
-                  down - {self.doc_down}
-""".format(self=self)
-        return output
-
+                  {method} - {self.doc_down}
+""".format(self=self, method=method)
+            return output
 
     def ident(self, text, space=18):
         text = dedent(text)
@@ -40,11 +39,11 @@ class FormatterMessage(object):
         return text
 
     def message_error_up(self, error):
-        message_error = termcolor.colored(self.message_up() + "\n" + str(error), "red")
+        message_error = termcolor.colored(self.message(method="up") + "\n" + str(error), "red")
         return message_error
 
     def message_error_down(self, error):
-        message_error = termcolor.colored(self.message_down() + "\n" + str(error), "red")
+        message_error = termcolor.colored(self.message(method="down") + "\n" + str(error), "red")
         return message_error
 
 
@@ -58,10 +57,10 @@ class TerminalMessages(object):
         print self.migrations.current_version
 
     def up_message(self, migration):
-        print FormatterMessage(migration).message_up()
+        print FormatterMessage(migration).message(method="up")
 
     def down_message(self, migration):
-        print FormatterMessage(migration).message_down()
+        print FormatterMessage(migration).message(method="down")
 
     def error_message_up(self, migration, error):
         print FormatterMessage(migration).message_error_up(error)
