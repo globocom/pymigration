@@ -42,7 +42,7 @@ class TestDiscovererMigration(unittest2.TestCase):
 
     def test_should_displays_pymigrations_version(self):
         output = shell("pymigration -v")
-        self.assertIn("0.0.3", output)
+        self.assertIn("0.0.4", output)
 
     def test_should_use_command_up_and_no_execute_migrations_of_tests_only_list(self):
         output = shell("pymigration -u --no-exec")
