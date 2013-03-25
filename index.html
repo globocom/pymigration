@@ -41,6 +41,10 @@
 
 <p>We try to make Pymigration both as easy-to-use and intuitive as possible, by making it automate most of your schema-changing tasks, while at the same time providing a powerful set of tools for large or complex projects.</p>
 
+<h1>Version</h1>
+
+<p>0.0.5</p>
+
 <h1>Install</h1>
 
 <p>If you have pip available on your system, just type::</p>
@@ -59,8 +63,9 @@
 migration files in the “pymigrations” directory. The migration files 
 have the following format::</p>
 
+<p>The folder pymigrations need be a module (__init__.py most be present in pymigrations folder).</p>
+
 <pre><code># -*- coding: utf-8 -*-
-#hello_world.py
 
 """
     migrate all the world of test
@@ -99,7 +104,7 @@ you just need do implement the methods get_current_version and set_current_versi
 
 folder = "/version_folder"
 
-def get_current_version():
+def current_version():
     with open("{folder}/version.txt".format(folder=folder)) as f:
         version = f.read()
     return version
