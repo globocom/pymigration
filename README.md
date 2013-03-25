@@ -9,6 +9,11 @@ Pymigration brings migrations to Python applications. Its main objectives are to
 
 We try to make Pymigration both as easy-to-use and intuitive as possible, by making it automate most of your schema-changing tasks, while at the same time providing a powerful set of tools for large or complex projects.
 
+Version
+=======
+
+0.0.5
+
 
 Install
 =======
