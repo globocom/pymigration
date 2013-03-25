@@ -50,7 +50,8 @@ def pymigration():
         except Exception, e:
             terminal_message.error_message_down(migration, e)
             sys.exit()
-        Version().set_current("0")
+        if args.execute:
+            Version().set_current("0")
 
     if args.up:
         try:
