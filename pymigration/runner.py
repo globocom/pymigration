@@ -44,11 +44,11 @@ def pymigration():
             if list(migrations.down_migrations()):
                 for migration in migrations.down_migrations():
                     migration.down()
-                    terminal_message.down_message(migration)
+                    terminal_message.make_message("down", migration)
             else:
                 print "No migrations need to be executed, already in %s version." % Version().get_current()
         except Exception, e:
-            terminal_message.error_message_down(migration, e)
+            terminal_message.error_message("down", migration, e)
             sys.exit()
         if args.execute:
             Version().set_current("0")
@@ -58,11 +58,11 @@ def pymigration():
             if list(migrations.up_migrations()):
                 for migration in migrations.up_migrations():
                     migration.up()
-                    terminal_message.up_message(migration)
+                    terminal_message.make_message("up", migration)
             else:
                 print "No migrations need to be executed, already in %s version." % Version().get_current()
         except Exception, e:
-            terminal_message.error_message_up(migration, e)
+            terminal_message.error_message("up", migration, e)
 
     if args.current_version:
         terminal_message.current_version()
@@ -72,17 +72,17 @@ def pymigration():
             if migrations.is_up():
                 try:
                     migration.up()
-                    terminal_message.up_message(migration)
+                    terminal_message.make_message("up", migration)
                 except Exception, e:
-                    terminal_message.error_message_up(migration, e)
+                    terminal_message.error_message("up", migration, e)
                     sys.exit()
 
             elif migrations.is_down():
                 try:
                     migration.down()
-                    terminal_message.down_message(migration)
+                    terminal_message.make_message("down", migration)
                 except Exception, e:
-                    terminal_message.error_message_down(migration, e)
+                    terminal_message.error_message("down", migration, e)
                     sys.exit()
         if args.execute:
             Version().set_current(args.version_to)
