@@ -19,7 +19,7 @@ class TestTerminalMessages(UnitTestCase):
         migration = MigrationWrapper(hello_world)
         message = TerminalMessages(DiscovererMigration())
         with self.get_stdout() as stdout:
-            message.up_message(migration)
+            message.make_message("up", migration)
         self.assertTextEqual("""
 0.0.1           - hello_world.py
                   migrate all the world of test
@@ -32,7 +32,7 @@ class TestTerminalMessages(UnitTestCase):
         migration = MigrationWrapper(hello_world)
         message = TerminalMessages(DiscovererMigration())
         with self.get_stdout() as stdout:
-            message.down_message(migration)
+            message.make_message("down", migration)
         self.assertTextEqual("""
 0.0.1           - hello_world.py
                   migrate all the world of test
@@ -44,7 +44,7 @@ class TestTerminalMessages(UnitTestCase):
         migration = MigrationWrapper(hello_world)
         message = TerminalMessages(DiscovererMigration())
         with self.get_stdout() as stdout:
-            message.error_message_up(migration, "AttributeError")
+            message.error_message("up", migration, "AttributeError")
         self.assertTextEqual("""
 \x1b[31m\n0.0.1           - hello_world.py
                   migrate all the world of test
@@ -59,7 +59,7 @@ AttributeError\x1b[0m
         migration = MigrationWrapper(hello_world)
         message = TerminalMessages(DiscovererMigration())
         with self.get_stdout() as stdout:
-            message.error_message_down(migration, "AttributeError")
+            message.error_message("down", migration, "AttributeError")
         self.assertTextEqual("""
 \x1b[31m\n0.0.1           - hello_world.py
                   migrate all the world of test
