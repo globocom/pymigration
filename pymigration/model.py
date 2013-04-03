@@ -31,13 +31,12 @@ class DiscovererMigration(object):
     def migrations_files(self, reverse=False):
         finder = ModuleFinder()
         submodules_names = [name for name in finder.find_all_submodules(pymigrations) if self._submodule_name_valid(name)]
-        submodules_names.remove("conf")
         submodules = [import_module("pymigrations.%s" % name) for name in submodules_names]
         submodules = sorted(submodules, key=lambda s: s.version, reverse=reverse)
         return submodules
 
     def _submodule_name_valid(self, name):
-        return (not name.startswith('.')) or (not name.startswith('_') or (name != "conf"))
+        return not (name.startswith('.') or  name.startswith('_') or name == "conf")
 
     def to_migrations(self):
         reverse = self.is_down()
