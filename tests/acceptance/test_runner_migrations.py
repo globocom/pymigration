@@ -42,7 +42,7 @@ class TestDiscovererMigration(unittest2.TestCase):
 
     def test_should_displays_pymigrations_version(self):
         output = shell("pymigration -v")
-        self.assertIn("0.0.3", output)
+        self.assertIn("0.0.5", output)
 
     def test_should_use_command_up_and_no_execute_migrations_of_tests_only_list(self):
         output = shell("pymigration -u --no-exec")
@@ -63,6 +63,12 @@ class TestDiscovererMigration(unittest2.TestCase):
 0.0.4           - exception.py
                   Test for raise a exception
                   up - Starting exeception
+
+
+0.0.5           - without_docstring.py
+                  No docstring founded
+                  up - No docstring founded
+
 """
         self.assertTextEqual(list_migrations.strip(), output.strip())
 
@@ -112,7 +118,7 @@ class TestDiscovererMigration(unittest2.TestCase):
 integer division or modulo by zero\x1b[0m""", output)
 
     def test_should_use_command_down_and_raise_exception(self):
-        Version().set_current("0.0.5")
+        Version().set_current("0.0.4")
         output = shell("pymigration -d")
         self.assertTextEqual("""Running command: pymigration -d
 \x1b[31m
@@ -132,3 +138,8 @@ integer division or modulo by zero\x1b[0m""", output)
                   up - Starting exeception
 
 integer division or modulo by zero\x1b[0m""", output)
+
+    def test_should_return_feedback_to_user_when_no_have_migration_to_run(self):
+        Version().set_current("0.0.5")
+        output = shell("pymigration -u")
+        self.assertEqual("Running command: pymigration -u\nNo migrations need to be executed, already in 0.0.5 version.", output)

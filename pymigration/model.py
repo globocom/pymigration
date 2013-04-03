@@ -77,13 +77,22 @@ class MigrationWrapper(object):
             Version().set_current(self.version)
 
     def header(self):
-        return inspect.getdoc(self.migration_file)
+        if inspect.getdoc(self.migration_file):
+            return inspect.getdoc(self.migration_file)
+        else:
+            return "No docstring founded"
 
     def doc_up(self):
-        return inspect.getdoc(self.migration_file.up)
+        if inspect.getdoc(self.migration_file.up):
+            return inspect.getdoc(self.migration_file.up)
+        else:
+            return "No docstring founded"
 
     def doc_down(self):
-        return inspect.getdoc(self.migration_file.down)
+        if inspect.getdoc(self.migration_file.down):
+            return inspect.getdoc(self.migration_file.down)
+        else:
+            return "No docstring founded"
 
     @property
     def version(self):

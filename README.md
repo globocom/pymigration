@@ -9,6 +9,11 @@ Pymigration brings migrations to Python applications. Its main objectives are to
 
 We try to make Pymigration both as easy-to-use and intuitive as possible, by making it automate most of your schema-changing tasks, while at the same time providing a powerful set of tools for large or complex projects.
 
+Version
+=======
+
+0.0.5
+
 
 Install
 =======
@@ -30,8 +35,10 @@ The first thing you’ll need is a migration file. There are some example
 migration files in the “pymigrations” directory. The migration files 
 have the following format::
 
+The folder pymigrations need be a module (\_\_init\_\_.py most be present in pymigrations folder).
+
+
     # -*- coding: utf-8 -*-
-    #hello_world.py
 
     """
         migrate all the world of test
@@ -69,7 +76,7 @@ you just need do implement the methods get_current_version and set_current_versi
 
     folder = "/version_folder"
 
-    def get_current_version():
+    def current_version():
         with open("{folder}/version.txt".format(folder=folder)) as f:
             version = f.read()
         return version
