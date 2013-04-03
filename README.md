@@ -12,7 +12,7 @@ We try to make Pymigration both as easy-to-use and intuitive as possible, by mak
 Version
 =======
 
-0.0.5
+0.0.6
 
 
 Install
