@@ -33,11 +33,12 @@ def pymigration():
 
     args = parser.parse_args()
 
-    if args.version:
-        print version
 
     migrations = DiscovererMigration(**vars(args))
     terminal_message = TerminalMessages(migrations, **vars(args))
+
+    if args.version:
+        print version
 
     if args.down:
         migrations = list(migrations.down_migrations())
